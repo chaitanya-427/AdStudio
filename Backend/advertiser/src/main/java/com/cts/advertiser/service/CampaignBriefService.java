@@ -14,10 +14,10 @@ public interface CampaignBriefService {
     List<CampaignBriefResponse> getAllCampaignBriefs();
 
     // Returns a single campaign brief by its ID
-    CampaignBriefResponse getCampaignBriefId(Integer id);
+    CampaignBriefResponse getCampaignBriefById(Integer id);
 
     // Returns all campaign briefs belonging to a specific brand
-    List<CampaignBriefResponse> getAllBriefsByBrand(Integer brandId);
+    List<CampaignBriefResponse> getAllBriefsByBrandId(Integer brandId);
 
     // Updates an existing campaign brief by its ID
     CampaignBriefResponse updateCampaignBrief(Integer id, CampaignBriefRequest request);
@@ -25,7 +25,7 @@ public interface CampaignBriefService {
     // Updates only the status of a campaign brief
     CampaignBriefResponse updateCampaignBriefStatus(Integer id, String status);
 
-    // Delets a campaign brieef by its ID
+    // Deletes a campaign brief by its ID
     void deleteCampaignBrief(Integer id);
     
 }
