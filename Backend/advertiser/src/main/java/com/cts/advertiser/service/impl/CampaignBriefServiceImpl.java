@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.advertiser.dto.request.CampaignBriefRequest;
 import com.cts.advertiser.dto.response.CampaignBriefResponse;
@@ -11,18 +12,22 @@ import com.cts.advertiser.entity.CampaignBrief;
 import com.cts.advertiser.exception.ResourceNotFoundException;
 import com.cts.advertiser.repository.CampaignBriefRepository;
 import com.cts.advertiser.service.CampaignBriefService;
+import com.cts.advertiser.shared.StatusTransitionValidator;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CampaignBriefServiceImpl implements CampaignBriefService {
 
     // Injected automatically by Spring via @RequiredArgsConstructor
     private final CampaignBriefRepository campaignBriefRepository;
+    private final StatusTransitionValidator statusTransitionValidator;
 
     // Converts request DTO to entity and saves to database
     @Override
+    @Transactional
     public CampaignBriefResponse createCampaignBrief(CampaignBriefRequest request) {
         
         CampaignBrief brief = CampaignBrief.builder()
@@ -43,7 +48,7 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
         return mapToResponse(saved);
         
     }
-
+ 
     // Retrieves all campaign briefs and maps them to response DTOs
     @Override
     public List<CampaignBriefResponse> getAllCampaignBriefs() {
@@ -76,6 +81,7 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
 
     // Updates existing campaign brief fields and saves changes
     @Override
+    @Transactional
     public CampaignBriefResponse updateCampaignBrief(Integer id, CampaignBriefRequest request) {
         
         CampaignBrief brief = campaignBriefRepository.findById(id)
@@ -98,12 +104,18 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
 
     // Updates only the status of a campaign brief
     @Override
+    @Transactional
     public CampaignBriefResponse updateCampaignBriefStatus(Integer id, String status) {
         
         CampaignBrief brief = campaignBriefRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Campaign brief not found with ID: " + id));
 
-        brief.setStatus(CampaignBrief.CampaignStatus.valueOf(status));
+        CampaignBrief.CampaignStatus targetStatus = CampaignBrief.CampaignStatus.valueOf(status);
+
+        // Validates the transition is allowed before applying it
+        statusTransitionValidator.validate(brief.getStatus(), targetStatus);
+
+        brief.setStatus(targetStatus);
 
         CampaignBrief updated = campaignBriefRepository.save(brief);
 
@@ -113,6 +125,7 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
 
     // Deletes campaign brief by ID or throws exception if not found
     @Override
+    @Transactional
     public void deleteCampaignBrief(Integer id) {
         
         if(!campaignBriefRepository.existsById(id)) throw new ResourceNotFoundException("Campaign brief not found with ID: " + id);

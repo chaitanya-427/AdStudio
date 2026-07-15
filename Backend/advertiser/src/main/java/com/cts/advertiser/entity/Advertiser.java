@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "advertiser")
@@ -42,6 +43,11 @@ public class Advertiser {
 
     @Column(name = "UpdatedAt")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "advertiser", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Brand> brands;
 
     @PrePersist
     public void prePersist() {

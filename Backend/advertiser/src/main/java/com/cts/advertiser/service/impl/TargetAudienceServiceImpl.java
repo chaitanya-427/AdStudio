@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.advertiser.dto.request.TargetAudienceRequest;
 import com.cts.advertiser.dto.response.TargetAudienceResponse;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TargetAudienceServiceImpl implements TargetAudienceService {
 
     // Injected automatically by Spring via @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class TargetAudienceServiceImpl implements TargetAudienceService {
 
     // Converts request DTO to entity and saves to database
     @Override
+    @Transactional
     public TargetAudienceResponse createTargetAudience(TargetAudienceRequest request) {
         
         TargetAudience audience = TargetAudience.builder()
@@ -75,6 +78,7 @@ public class TargetAudienceServiceImpl implements TargetAudienceService {
 
     // Update existing target audience fields and saves changes
     @Override
+    @Transactional
     public TargetAudienceResponse updateTargetAudience(Integer id, TargetAudienceRequest request) {
         
         TargetAudience audience = targetAudienceRepository.findById(id)
@@ -94,6 +98,7 @@ public class TargetAudienceServiceImpl implements TargetAudienceService {
 
     // Deltes target audience by ID or throws exception if not found
     @Override
+    @Transactional
     public void deleteTargetAudience(Integer id) {
         
         if(!targetAudienceRepository.existsById(id)) throw new ResourceNotFoundException("Target audience not found with ID: " + id);
