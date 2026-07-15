@@ -1,15 +1,15 @@
-package com.cts.finance;
+package com.cts.adstudio.finance;
 
-import com.cts.finance.billing.dto.*;
-import com.cts.finance.billing.entity.ClientInvoice;
-import com.cts.finance.billing.enums.ClientInvoiceStatus;
-import com.cts.finance.billing.exception.BillingRuleException;
-import com.cts.finance.billing.repository.ClientInvoiceRepository;
-import com.cts.finance.billing.service.ClientInvoiceService;
-import com.cts.finance.shared.AuditLogService;
-import com.cts.finance.shared.BudgetCalculationService;
-import com.cts.finance.shared.StatusTransitionValidator;
-import com.cts.finance.shared.exception.IllegalStatusTransitionException;
+import com.cts.adstudio.finance.billing.dto.*;
+import com.cts.adstudio.finance.billing.entity.ClientInvoice;
+import com.cts.adstudio.finance.billing.enums.ClientInvoiceStatus;
+import com.cts.adstudio.finance.billing.exception.BillingRuleException;
+import com.cts.adstudio.finance.billing.repository.ClientInvoiceRepository;
+import com.cts.adstudio.finance.billing.service.ClientInvoiceService;
+import com.cts.adstudio.finance.shared.AuditLogService;
+import com.cts.adstudio.finance.shared.BudgetCalculationService;
+import com.cts.adstudio.finance.shared.StatusTransitionValidator;
+import com.cts.adstudio.finance.shared.exception.IllegalStatusTransitionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

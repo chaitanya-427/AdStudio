@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.adstudio</groupId>
+    <groupId>com.cts.adstudio</groupId>
     <artifactId>billing-service</artifactId>
     <version>0.1.0</version>
     <name>AdStudio Billing Service</name>
