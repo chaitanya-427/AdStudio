@@ -22,6 +22,12 @@ public class CampaignBrief {
     @Column(name = "BrandID", nullable = false)
     private Integer brandId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BrandID", insertable = false, updatable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Brand brand;
+
     @Column(name = "CampaignName", nullable = false, length = 150)
     private String campaignName;
 

@@ -21,6 +21,12 @@ public class Brand {
     @Column(name = "AdvertiserID", nullable = false)
     private Integer advertiserId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AdvertiserID", insertable = false, updatable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Advertiser advertiser;
+
     @Column(name = "BrandName", nullable = false, length = 100)
     private String brandName;
 
@@ -42,7 +48,6 @@ public class Brand {
 
     @Column(name = "UpdatedAt")
     private LocalDateTime updatedAt;
-
 
     @PrePersist
     public void prePersist() {

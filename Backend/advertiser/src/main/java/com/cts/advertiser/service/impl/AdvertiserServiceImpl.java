@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.advertiser.dto.request.AdvertiserRequest;
 import com.cts.advertiser.dto.response.AdvertiserResponse;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdvertiserServiceImpl implements AdvertiserService {
     
     // Injected automatically by Spring via @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
     // Converts request DTO to entity and saves to database
     @Override
+    @Transactional
     public AdvertiserResponse createAdvertiser(AdvertiserRequest request) {
         Advertiser advertiser = Advertiser.builder()
             .companyName(request.getCompanyName())
@@ -56,6 +59,7 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
     // Updates existing advertiser fields and saves changes
     @Override
+    @Transactional
     public AdvertiserResponse updateAdvertiser(Integer id, AdvertiserRequest request) {
         Advertiser advertiser = advertiserRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Advertiser not found with ID: " + id));
@@ -73,6 +77,7 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
     // Deletes advertiser by ID or throws exception if not found
     @Override
+    @Transactional
     public void deleteAdvertiser(Integer id) {
         if(!advertiserRepository.existsById(id)) throw new ResourceNotFoundException("Advertiser not found with ID: " + id);
 

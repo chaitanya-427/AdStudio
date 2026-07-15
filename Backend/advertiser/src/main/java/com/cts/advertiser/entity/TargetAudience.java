@@ -20,6 +20,12 @@ public class TargetAudience {
     @Column(name = "BriefID", nullable = false)
     private Integer briefId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BriefID", insertable = false, updatable = false)
+    @ToString.Exclude 
+    @EqualsAndHashCode.Exclude
+    private CampaignBrief campaignBrief;
+
     @Column(name = "AgeRange", length = 50)
     private String ageRange;
 
