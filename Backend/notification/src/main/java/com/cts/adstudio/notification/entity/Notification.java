@@ -1,4 +1,4 @@
-package com.cts.adstudio.notificationservice.entity;
+package com.cts.adstudio.notification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

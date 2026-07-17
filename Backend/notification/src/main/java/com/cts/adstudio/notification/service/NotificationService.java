@@ -1,7 +1,7 @@
-package com.cts.adstudio.notificationservice.service;
+package com.cts.adstudio.notification.service;
 
-import com.cts.adstudio.notificationservice.dto.request.NotificationRequest;
-import com.cts.adstudio.notificationservice.dto.response.NotificationResponse;
+import com.cts.adstudio.notification.dto.request.NotificationRequest;
+import com.cts.adstudio.notification.dto.response.NotificationResponse;
 import java.util.List;
 
 public interface NotificationService {

@@ -1,4 +1,4 @@
-package com.cts.adstudio.notificationservice.shared;
+package com.cts.adstudio.notification.shared;
 
 import lombok.Builder;
 import lombok.Data;
