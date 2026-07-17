@@ -1,9 +1,9 @@
-package com.cts.adstudio.notificationservice.controller;
+package com.cts.adstudio.notification.controller;
 
-import com.cts.adstudio.notificationservice.dto.request.NotificationRequest;
-import com.cts.adstudio.notificationservice.dto.response.NotificationResponse;
-import com.cts.adstudio.notificationservice.service.NotificationService;
-import com.cts.adstudio.notificationservice.shared.ApiResponse;
+import com.cts.adstudio.notification.dto.request.NotificationRequest;
+import com.cts.adstudio.notification.dto.response.NotificationResponse;
+import com.cts.adstudio.notification.service.NotificationService;
+import com.cts.adstudio.notification.shared.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,11 +1,11 @@
-package com.cts.adstudio.notificationservice.service.impl;
+package com.cts.adstudio.notification.service.impl;
 
-import com.cts.adstudio.notificationservice.dto.request.NotificationRequest;
-import com.cts.adstudio.notificationservice.dto.response.NotificationResponse;
-import com.cts.adstudio.notificationservice.entity.Notification;
-import com.cts.adstudio.notificationservice.exception.ResourceNotFoundException;
-import com.cts.adstudio.notificationservice.repository.NotificationRepository;
-import com.cts.adstudio.notificationservice.service.NotificationService;
+import com.cts.adstudio.notification.dto.request.NotificationRequest;
+import com.cts.adstudio.notification.dto.response.NotificationResponse;
+import com.cts.adstudio.notification.entity.Notification;
+import com.cts.adstudio.notification.exception.ResourceNotFoundException;
+import com.cts.adstudio.notification.repository.NotificationRepository;
+import com.cts.adstudio.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

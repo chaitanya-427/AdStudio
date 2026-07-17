@@ -1,6 +1,6 @@
-package com.cts.adstudio.notificationservice.exception;
+package com.cts.adstudio.notification.exception;
 
-import com.cts.adstudio.notificationservice.shared.ApiResponse;
+import com.cts.adstudio.notification.shared.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
-public class GlobalExceptionHandler {
+@RestControllerAdvice(basePackages = "com.cts.adstudio.notification")
+public class NotificationExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleNotFound(ResourceNotFoundException ex) {

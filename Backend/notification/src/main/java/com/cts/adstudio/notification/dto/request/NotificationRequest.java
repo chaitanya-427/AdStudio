@@ -1,4 +1,4 @@
-package com.cts.adstudio.notificationservice.dto.request;
+package com.cts.adstudio.notification.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

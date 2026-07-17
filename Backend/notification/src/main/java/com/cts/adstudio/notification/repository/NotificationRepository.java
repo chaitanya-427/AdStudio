@@ -1,6 +1,6 @@
-package com.cts.adstudio.notificationservice.repository;
+package com.cts.adstudio.notification.repository;
 
-import com.cts.adstudio.notificationservice.entity.Notification;
+import com.cts.adstudio.notification.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

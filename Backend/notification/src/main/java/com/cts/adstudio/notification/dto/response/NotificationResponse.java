@@ -1,4 +1,4 @@
-package com.cts.adstudio.notificationservice.dto.response;
+package com.cts.adstudio.notification.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

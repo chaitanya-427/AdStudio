@@ -1,4 +1,4 @@
-package com.cts.adstudio.notificationservice.exception;
+package com.cts.adstudio.notification.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
