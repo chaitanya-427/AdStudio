@@ -36,7 +36,7 @@ public class RegisterRequest {
     @NotNull(message = "Role is required")
     private Role role;
 
-    private Long accountId;
+//    private Long accountId; // this should be generated automatically by database
 
     /** Optional. Defaults to ACTIVE when omitted. */
     private UserStatus status;
