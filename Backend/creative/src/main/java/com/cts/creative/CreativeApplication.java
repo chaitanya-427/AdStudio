@@ -1,4 +1,4 @@
-package com.cts;
+package com.cts.creative;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
