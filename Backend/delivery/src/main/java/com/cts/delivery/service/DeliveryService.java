@@ -1,0 +1,114 @@
+package com.cts.delivery.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.cts.delivery.dto.DeliveryRequest;
+import com.cts.delivery.dto.PacingSummaryResponse;
+import com.cts.delivery.entity.DeliveryRecord;
+import com.cts.delivery.deliveryexception.DeliveryNotFoundException;
+import com.cts.delivery.repository.DeliveryRecordRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class DeliveryService {
+
+    private final DeliveryRecordRepository repository;
+
+    public DeliveryRecord create(
+            DeliveryRequest request) {
+
+        if (repository
+                .existsByLineItemIdAndIoIdAndReportingDate(
+                        request.lineItemId(),
+                        request.ioId(),
+                        request.reportingDate())) {
+
+            throw new RuntimeException(
+                    "Duplicate delivery record detected");
+        }
+
+        var record = DeliveryRecord.builder()
+                .lineItemId(request.lineItemId())
+                .ioId(request.ioId())
+                .reportingDate(request.reportingDate())
+                .deliveredImpressions(
+                        request.deliveredImpressions())
+                .clicks(request.clicks())
+                .spend(request.spend())
+                .source(
+                        DeliveryRecord.Source.valueOf(
+                                request.source()))
+                .status(
+                        DeliveryRecord.Status.valueOf(
+                                request.status()))
+                .build();
+
+        return repository.save(record);
+    }
+
+    public List<DeliveryRecord> getAll() {
+        return repository.findAll();
+    }
+
+    public DeliveryRecord getById(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new DeliveryNotFoundException(
+                                "Delivery Record Not Found"));
+    }
+
+    public void delete(Long id) {
+
+        var record = getById(id);
+
+        repository.delete(record);
+    }
+
+    public List<DeliveryRecord> getLineItemDeliveries(
+            Long lineItemId) {
+
+        return repository.findByLineItemId(
+                lineItemId);
+    }
+
+    public PacingSummaryResponse getPacingSummary(
+            Long lineItemId) {
+
+        var records =
+                repository.findByLineItemId(
+                        lineItemId);
+
+        long impressions =
+                records.stream()
+                        .mapToLong(
+                                DeliveryRecord::getDeliveredImpressions)
+                        .sum();
+
+        long clicks =
+                records.stream()
+                        .mapToLong(
+                                DeliveryRecord::getClicks)
+                        .sum();
+
+        double spend =
+                records.stream()
+                        .mapToDouble(
+                                r -> r.getSpend()
+                                        .doubleValue())
+                        .sum();
+
+        return new PacingSummaryResponse(
+                lineItemId,
+                impressions,
+                clicks,
+                spend
+        );
+    }
+}

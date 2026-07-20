@@ -1,20 +1,21 @@
 package com.cts.creative.service;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cts.creative.creativeexception.CreativeNotFoundException;
 import com.cts.creative.dto.ApprovalRequest;
 import com.cts.creative.dto.AssetLinkRequest;
 import com.cts.creative.entity.AssetLineItemLink;
 import com.cts.creative.entity.CreativeApproval;
 import com.cts.creative.entity.CreativeAsset;
-import com.cts.creative.creativeexception.CreativeNotFoundException;
 import com.cts.creative.repository.AssetLineItemLinkRepository;
 import com.cts.creative.repository.CreativeApprovalRepository;
 import com.cts.creative.repository.CreativeAssetRepository;
@@ -29,9 +30,6 @@ public class CreativeService {
     private final CreativeAssetRepository assetRepo;
     private final CreativeApprovalRepository approvalRepo;
     private final AssetLineItemLinkRepository linkRepo;
-
-    @Value("${creative.upload.path}")
-    private String uploadPath;
 
     // UPLOAD CREATIVE ASSET
     public CreativeAsset upload(
@@ -49,11 +47,12 @@ public class CreativeService {
             throw new RuntimeException("File cannot be empty");
         }
 
-        File dir = new File(uploadPath);
+        Path uploadDir = Paths.get(
+                System.getProperty("user.dir"),
+                "uploads"
+        );
 
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        Files.createDirectories(uploadDir);
 
         String fileName =
                 System.currentTimeMillis()
@@ -61,9 +60,10 @@ public class CreativeService {
                         + file.getOriginalFilename()
                         .replaceAll("\\s+", "_");
 
-        String filePath = uploadPath + fileName;
+        Path filePath =
+                uploadDir.resolve(fileName);
 
-        file.transferTo(new File(filePath));
+        file.transferTo(filePath.toFile());
 
         CreativeAsset asset =
                 CreativeAsset.builder()
@@ -74,7 +74,7 @@ public class CreativeService {
                         .assetType(assetType)
                         .width(width)
                         .height(height)
-                        .filePath(filePath)
+                        .filePath(filePath.toString())
                         .fileSizeKB((int) (file.getSize() / 1024))
                         .version(1)
                         .status(CreativeAsset.Status.DRAFT)
@@ -122,13 +122,18 @@ public class CreativeService {
 
             if (asset.getFilePath() != null) {
 
-                File oldFile =
-                        new File(asset.getFilePath());
+                Path oldFile =
+                        Paths.get(asset.getFilePath());
 
-                if (oldFile.exists()) {
-                    oldFile.delete();
-                }
+                Files.deleteIfExists(oldFile);
             }
+
+            Path uploadDir = Paths.get(
+                    System.getProperty("user.dir"),
+                    "uploads"
+            );
+
+            Files.createDirectories(uploadDir);
 
             String fileName =
                     System.currentTimeMillis()
@@ -136,12 +141,13 @@ public class CreativeService {
                             + file.getOriginalFilename()
                             .replaceAll("\\s+", "_");
 
-            String filePath =
-                    uploadPath + fileName;
+            Path filePath =
+                    uploadDir.resolve(fileName);
 
-            file.transferTo(new File(filePath));
+            file.transferTo(filePath.toFile());
 
-            asset.setFilePath(filePath);
+            asset.setFilePath(
+                    filePath.toString());
 
             asset.setFileSizeKB(
                     (int) (file.getSize() / 1024));
@@ -172,7 +178,7 @@ public class CreativeService {
         assetRepo.delete(asset);
     }
 
-    // APPROVE / REJECT ASSET
+    // APPROVE OR REJECT ASSET
     public CreativeApproval approveAsset(
             Long assetId,
             ApprovalRequest request) {
