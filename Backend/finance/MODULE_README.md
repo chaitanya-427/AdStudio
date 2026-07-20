@@ -39,7 +39,7 @@ On startup Flyway applies `V16`/`V17`, and `ddl-auto=validate` checks the entiti
 **Build a jar / run tests:**
 ```bash
 mvn clean package
-java -jar target/billing-service-0.1.0.jar
+java -jar target/finance-0.1.0.jar
 mvn test          # unit tests: no DB, no Spring context
 ```
 

@@ -7,25 +7,43 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version> 4.0.6</version>
+        <version>4.0.6</version>
         <relativePath/>
     </parent>
 
     <groupId>com.cts.adstudio</groupId>
-    <artifactId>billing-service</artifactId>
+    <artifactId>finance</artifactId>
     <version>0.1.0</version>
-    <name>AdStudio Billing Service</name>
+    <name>finance</name>
     <description>Billing &amp; Reconciliation microservice (ClientInvoice + PublisherInvoice)</description>
 
     <properties>
         <java.version>21</java.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>3.0.3</springdoc.version>
+        <spring-cloud.version>2025.1.1</spring-cloud.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud BOM: import here, NOT as a plain dependency -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,7 +60,7 @@
         <!-- Validate incoming JWTs issued by the IAM service (resource server) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+            <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,9 +68,11 @@
         </dependency>
 
         <!-- Schema migrations (own database) -->
+        <!-- Boot 4 requires the dedicated starter for Flyway autoconfiguration;
+             raw flyway-core/flyway-mysql alone will no longer wire it up -->
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
