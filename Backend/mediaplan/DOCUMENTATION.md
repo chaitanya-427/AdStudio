@@ -2,7 +2,7 @@
 
 **Module:** Media Plan & Insertion Order Management
 **Owner:** Dev 3 (Prabhat A)
-**Service name:** `mediaplan-service`
+**Service name:** `mediaplan`
 **Part of:** AdStudio — Digital Advertising & Campaign Management Platform
 
 ---
