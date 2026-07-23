@@ -1,7 +1,7 @@
 /* ============================================================
    AdStudio · Mock data
    Used as a fallback so every screen renders even with no backend
-   running on :8181. When a real backend is connected it is ignored.
+   running on :9090. When a real backend is connected it is ignored.
    ============================================================ */
 
 /* ------------------------------------------------------------
@@ -11,7 +11,7 @@
    >>> 'publisher' is intentionally left out below to DEMONSTRATE
        the not-authorized gate. Uncomment it (or add it) to unlock
        the Publisher Portal. In production this list comes from
-       GET http://localhost:8181/eligibilityList
+       GET http://localhost:9090/eligibilityList
    ------------------------------------------------------------ */
 export const MOCK_ELIGIBILITY = [
   "dashboard",

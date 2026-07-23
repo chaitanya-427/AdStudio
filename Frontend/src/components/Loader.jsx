@@ -11,7 +11,7 @@ export function Loader({ label = "Loading data…" }) {
 
 export function MockFlag() {
   return (
-    <span className="mock-flag" title="No backend detected on :8181 — showing sample data">
+    <span className="mock-flag" title="No backend detected on :9090 — showing sample data">
       <span className="dot" />
       Sample data
     </span>

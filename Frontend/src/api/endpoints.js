@@ -1,8 +1,8 @@
 /* ============================================================
    AdStudio · API endpoints
-   Every backend call goes to a SINGLE port: 8181.
+   Every backend call goes to a SINGLE port: 9090.
    These are the dummy endpoint names the frontend talks to.
-   If a real backend is running on 8181 it is used automatically;
+   If a real backend is running on 9090 it is used automatically;
    otherwise each page falls back to local mock data (see hooks/useApiData).
    ============================================================ */
 

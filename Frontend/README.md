@@ -58,15 +58,15 @@ tables, KPI cards, progress bars and custom SVG charts.
 
 ---
 
-## 3. Backend wiring (single port **8181**)
+## 3. Backend wiring (single port **9090**)
 
-All API calls go to **one** base URL: `http://localhost:8181`. The endpoint
+All API calls go to **one** base URL: `http://localhost:9090`. The endpoint
 names are defined in `src/api/endpoints.js`. If a real backend answers, it is
 used and unwraps the standard `{ success, data, message }` envelope; otherwise
 the page quietly shows sample data and a small **"Sample data"** flag appears in
 the page header.
 
-Key endpoints (all relative to `http://localhost:8181/`):
+Key endpoints (all relative to `http://localhost:9090/`):
 
 ```
 eligibilityList                 -> which portals the user may open
@@ -86,15 +86,15 @@ admin/users | admin/audit-logs | admin/channels | admin/rate-cards
 ```
 
 > Note: the team's Spring Boot backend defaults to port **8080**. This frontend
-> intentionally calls **8181** as requested. Point them at the same port (run
-> the backend on 8181, or change `API_BASE` in `src/api/endpoints.js`) when you
+> intentionally calls **9090** as requested. Point them at the same port (run
+> the backend on 9090, or change `API_BASE` in `src/api/endpoints.js`) when you
 > wire them together.
 
 ---
 
 ## 4. Authorization — the red "Not authorized" box
 
-On sign-in the app calls **`GET http://localhost:8181/eligibilityList`** and
+On sign-in the app calls **`GET http://localhost:9090/eligibilityList`** and
 stores the returned array of portal keys. For any portal **not** in that list,
 the page shows a red **"You are not authorized for this portal"** box and **no
 content** is rendered. Eligible portals open normally. Non-eligible portals also
@@ -124,7 +124,7 @@ adstudio-frontend/
     ├── App.jsx                  # route table + per-portal eligibility guards
     ├── index.css                # design tokens (navy palette, fonts, resets)
     ├── api/
-    │   ├── endpoints.js         # single base URL (:8181) + endpoint names
+    │   ├── endpoints.js         # single base URL (:9090) + endpoint names
     │   └── apiClient.js         # fetch wrapper, JWT header, envelope unwrap
     ├── context/
     │   └── AuthContext.jsx      # auth + eligibility list (with mock fallback)

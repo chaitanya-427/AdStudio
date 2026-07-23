@@ -145,7 +145,7 @@ export default function Login() {
           <div className="demo-note">
             <IcInfo />
             <span>
-              Demo mode: any email/password works. The app calls <b>localhost:8181</b> and falls
+              Demo mode: any email/password works. The app calls <b>localhost:9090</b> and falls
               back to sample data if no backend is running.
             </span>
           </div>

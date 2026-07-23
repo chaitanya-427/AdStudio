@@ -1,7 +1,7 @@
 /* ============================================================
    AdStudio · Auth context
    Holds the signed-in user, JWT and the eligibility list.
-   On login it calls the dummy backend on :8181; if that is
+   On login it calls the dummy backend on :9090; if that is
    unreachable it signs in locally so the UI is fully usable.
    The eligibility list (GET /eligibilityList) decides which
    portals are unlocked vs. show the red "Not authorized" box.
@@ -51,7 +51,7 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = !!getToken() && !!user;
 
-  /* ---- fetch the eligibility list from :8181 (mock fallback) ---- */
+  /* ---- fetch the eligibility list from :9090 (mock fallback) ---- */
   const loadEligibility = useCallback(async () => {
     setEligibilityLoading(true);
     try {
@@ -64,7 +64,7 @@ export function AuthProvider({ children }) {
       setEligibility(list || []);
       setEligibilityIsMock(false);
     } catch {
-      // No backend on :8181 -> use the mock eligibility list.
+      // No backend on :9090 -> use the mock eligibility list.
       setEligibility(MOCK_ELIGIBILITY);
       setEligibilityIsMock(true);
     } finally {

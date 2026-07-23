@@ -123,7 +123,7 @@ export default function Register() {
 
           <div className="demo-note">
             <IcInfo />
-            <span>Demo mode: registration signs you straight in. Connect a backend on <b>localhost:8181</b> to persist accounts.</span>
+            <span>Demo mode: registration signs you straight in. Connect a backend on <b>localhost:9090</b> to persist accounts.</span>
           </div>
 
           <div className="auth-alt">

@@ -1,6 +1,6 @@
 /* ============================================================
    AdStudio · API client
-   A tiny fetch wrapper around the single 8181 backend.
+   A tiny fetch wrapper around the single 9090 backend.
    - attaches the JWT from localStorage as "Authorization: Bearer <token>"
    - unwraps the standard ApiResponse envelope { success, data, message }
    ============================================================ */
