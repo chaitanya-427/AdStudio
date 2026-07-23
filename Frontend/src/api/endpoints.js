@@ -10,7 +10,7 @@ export const API_BASE = "http://localhost:9090";
 
 export const ENDPOINTS = {
   // --- access / auth ---
-  eligibilityList: "eligibilityList", // -> ["dashboard","advertiser", ...]
+  eligibilityList: "api/auth/eligibility-list", // -> ["dashboard","advertiser", ...]
   login: "api/auth/login",
   register: "api/auth/register",
 

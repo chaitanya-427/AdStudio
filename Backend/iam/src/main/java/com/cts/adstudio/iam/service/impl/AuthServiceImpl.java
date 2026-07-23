@@ -1,5 +1,6 @@
 package com.cts.adstudio.iam.service.impl;
 
+import com.cts.adstudio.iam.enums.Role;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,9 @@ import com.cts.adstudio.iam.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -59,6 +63,58 @@ public class AuthServiceImpl implements AuthService {
         auditLogService.record(saved.getUserId(), "REGISTER_USER", "User");
 
         return toUserResponse(saved);
+    }
+
+    @Override
+    public List<String> getEligibleModules(Role role) {
+        List<String> modules = new ArrayList<>();
+
+        // Everyone gets the dashboard + notifications by default
+        modules.add("dashboard");
+        modules.add("notifications");
+
+        if (role == Role.ADMIN) {
+            // Admin gets everything
+            modules.add("advertiser");
+            modules.add("campaign");
+            modules.add("mediaplan");
+            modules.add("creative");
+            modules.add("delivery");
+            modules.add("publisher");
+            modules.add("finance");
+            modules.add("analytics");
+            modules.add("admin");
+
+        } else if (role == Role.BRAND_ADVERTISER) {
+            modules.add("advertiser");
+            modules.add("campaign");
+            modules.add("analytics");
+
+        } else if (role == Role.MEDIA_PLANNER) {
+            modules.add("campaign");
+            modules.add("mediaplan");
+            modules.add("analytics");
+
+        } else if (role == Role.CREATIVE_MANAGER) {
+            modules.add("campaign");
+            modules.add("creative");
+
+        } else if (role == Role.DELIVERY_PUBLISHER) {
+            modules.add("delivery");
+            // NOTE: publisher intentionally excluded, matching your mock's "red gate" demo
+            modules.add("analytics");
+
+        } else if (role == Role.FINANCE_EXECUTIVE) {
+            modules.add("finance");
+            modules.add("analytics");
+
+        }
+//        else {
+//            // Unknown/unassigned role — safest default is dashboard-only,
+//            // already added above. No extra modules.
+//        }
+
+        return modules;
     }
 
     @Override

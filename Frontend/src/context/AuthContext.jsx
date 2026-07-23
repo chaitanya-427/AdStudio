@@ -48,8 +48,10 @@ export function AuthProvider({ children }) {
       setEligibilityIsMock(false);
     } catch {
       // No backend on :9090 -> use the mock eligibility list.
-      setEligibility(MOCK_ELIGIBILITY);
-      setEligibilityIsMock(true);
+      // setEligibility(MOCK_ELIGIBILITY);
+      // setEligibilityIsMock(true);
+      console.log("eligibility fetching error");
+      
     } finally {
       setEligibilityLoading(false);
     }
