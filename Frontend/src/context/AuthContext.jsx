@@ -70,11 +70,15 @@ export function AuthProvider({ children }) {
       if (!res.ok) throw new Error("backend login failed");
       const json = await res.json();
       const payload = json.data || json;
+      console.log("here ---->>> ",payload);
+      
       setToken(payload.token || "live-session");
       const u = payload.user || {
         name: payload.name || "not fetched",
         email,
         role: payload.role || "not fetched",
+        userId : payload.userId,
+        token : payload.token
       };
       localStorage.setItem(USER_KEY, JSON.stringify(u));
       setUser(u);
