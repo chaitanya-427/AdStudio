@@ -4,28 +4,7 @@
    running on :9090. When a real backend is connected it is ignored.
    ============================================================ */
 
-/* ------------------------------------------------------------
-   ELIGIBILITY — which portals the signed-in user may open.
-   Anything NOT in this list shows the red "Not authorized" box.
 
-   >>> 'publisher' is intentionally left out below to DEMONSTRATE
-       the not-authorized gate. Uncomment it (or add it) to unlock
-       the Publisher Portal. In production this list comes from
-       GET http://localhost:9090/eligibilityList
-   ------------------------------------------------------------ */
-export const MOCK_ELIGIBILITY = [
-  "dashboard",
-  "advertiser",
-  "campaign",
-  "mediaplan",
-  "creative",
-  "delivery",
-  // "publisher",   // <-- excluded on purpose to show the red gate. Uncomment to enable.
-  "finance",
-  "analytics",
-  "notifications",
-  "admin",
-];
 
 export const MOCK_USER = {
   name: "Ava Sinclair",

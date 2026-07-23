@@ -10,14 +10,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { API_BASE, ENDPOINTS } from "../api/endpoints";
 import { getToken, setToken, clearToken } from "../api/apiClient";
-import { MOCK_ELIGIBILITY } from "../data/mockData";
 
 const AuthContext = createContext(null);
 
 const USER_KEY = "adstudio_user";
-
-
-
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {

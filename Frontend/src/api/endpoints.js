@@ -21,8 +21,8 @@ export const ENDPOINTS = {
   recentCampaigns: "dashboard/recent-campaigns",
 
   // --- advertiser & brand ---
-  advertisers: "advertiser/list",
-  brands: "advertiser/brands",
+  advertisers: "api/campaign-briefs",
+  brands: "api/brands",
 
   // --- campaign planning ---
   campaignBriefs: "campaign/briefs",
