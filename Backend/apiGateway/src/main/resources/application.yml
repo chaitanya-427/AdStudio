@@ -21,7 +21,7 @@ spring:
             - id: delivery
               uri: lb://delivery
               predicates:
-                - Path=/api/delivery/**
+                - Path=/api/delivery-records/**,/api/pacing-alerts/**
             - id: finance
               uri: lb://finance
               predicates:

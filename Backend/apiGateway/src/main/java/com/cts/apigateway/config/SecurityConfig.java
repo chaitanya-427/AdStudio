@@ -126,6 +126,15 @@ public class SecurityConfig {
                                         "/api/asset-links/**"
                                 )
                                 .hasAnyRole("CREATIVE_MANAGER", "ADMIN")
+                // =============================================
+                // DELIVERY & PACING MODULES
+                // - DELIVERY_PUBLISHER, ADMIN
+                // =============================================
+                    .pathMatchers(
+                            "/api/delivery-records/**",
+                            "/api/pacing-alerts/**"
+                    )
+                    .hasAnyRole("DELIVERY_PUBLISHER", "ADMIN")
 
 
                         // =============================================
