@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ENDPOINTS } from "../../api/endpoints.js";
+import {API_BASE, ENDPOINTS } from "../../api/endpoints.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { getToken} from "../../api/apiClient.js";
 /* ---------------------------------------------------------------------- */
@@ -28,7 +28,7 @@ export default function AdvertiserForm({ initial, onCancel, onSaved }) {
     setError(null);
     try {
       console.log(user); 
-      const url = isEdit ? `${ENDPOINTS.advertisers}/${initial.id}` : ENDPOINTS.advertisers;
+      const url = isEdit ? `${API_BASE}/${ENDPOINTS.advertisers}/${initial.id}` : `${API_BASE}/${ENDPOINTS.advertisers}`;
       const method = isEdit ? "PUT" : "POST";
      const { status, ...rest } = form;
       if(!isEdit){
