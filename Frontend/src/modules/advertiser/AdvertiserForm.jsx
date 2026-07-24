@@ -30,7 +30,7 @@ export default function AdvertiserForm({ initial, onCancel, onSaved }) {
       console.log(user); 
       const url = isEdit ? `${API_BASE}/${ENDPOINTS.advertisers}/${initial.id}` : `${API_BASE}/${ENDPOINTS.advertisers}`;
       const method = isEdit ? "PUT" : "POST";
-     const { status, ...rest } = form;
+     const { status, ...rest } = form; 
       if(!isEdit){
        
         setForm(rest);
