@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getToken } from "./apiClient.js";
+import { getToken } from "../../api/apiClient.js";
 
 /**
  * The gateway requires a valid JWT (Authorization: Bearer <token>) on

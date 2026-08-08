@@ -3,7 +3,7 @@ import StatusBadge from "../../components/StatusBadge.jsx";
 import { IcTarget, IcLink } from "../../assets/icons.jsx";
 import { FORMAT_META } from "./creativeStudio.constants.js";
 import { API_BASE, ENDPOINTS } from "../../api/endpoints.js";
-import { useAuthedFileUrl } from "../../api/useAuthedFileUrl.js";
+import { useAuthedFileUrl } from "./useAuthedFileUrl.js";
 
 function toFormatKey(str) {
   if (!str) return "Banner";
