@@ -3,7 +3,6 @@ import PageHeader from "../../components/PageHeader.jsx";
 import Tabs from "../../components/Tabs.jsx";
 import { MockFlag } from "../../components/Loader.jsx";
 import { useApiData } from "../../api/useApiData.js";
-import { useAllLineItems } from "../../api/useAllLineItems.js";
 import { ENDPOINTS } from "../../api/endpoints.js";
 import { IcDelivery, IcPlus } from "../../assets/icons.jsx";
 import {
@@ -34,11 +33,8 @@ export default function DeliveryTracking() {
     MOCK_PACING_ALERTS
   );
 
-  // Line items are aggregated across every media plan (see useAllLineItems -
-  // there's no flat "all line items" endpoint), which is the exact same
-  // source Creative's "link asset to line item" form uses, so both modules
-  // always show the same real line item IDs from the media planner.
-  const { data: lineItems } = useAllLineItems(MOCK_LINE_ITEMS);
+ 
+  const { data: lineItems } = useApiData(ENDPOINTS.lineItemsAll, MOCK_LINE_ITEMS);
   const { data: insertionOrders } = useApiData(ENDPOINTS.insertionOrders, MOCK_INSERTION_ORDERS);
 
   const tabs = [

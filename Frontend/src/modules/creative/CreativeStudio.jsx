@@ -3,7 +3,6 @@ import PageHeader from "../../components/PageHeader.jsx";
 import Tabs from "../../components/Tabs.jsx";
 import { MockFlag } from "../../components/Loader.jsx";
 import { useApiData } from "../../api/useApiData.js";
-import { useAllLineItems } from "../../api/useAllLineItems.js";
 import { ENDPOINTS, API_BASE } from "../../api/endpoints.js";
 import { getToken } from "../../api/apiClient.js";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -38,7 +37,7 @@ export default function CreativeStudio() {
 
   const { data: brands } = useApiData(ENDPOINTS.brands, MOCK_BRANDS);
   const { data: briefs } = useApiData(ENDPOINTS.campaignBriefs, MOCK_BRIEFS);
-  const { data: lineItems } = useAllLineItems(MOCK_LINE_ITEMS);
+  const { data: lineItems } = useApiData(ENDPOINTS.lineItemsAll , MOCK_LINE_ITEMS); //useAllffLineItems(MOCK_LINE_ITEMS);
   const { data: users } = useApiData(ENDPOINTS.adminUsers, MOCK_USERS);
 
   const [showUploadForm, setShowUploadForm] = useState(false);

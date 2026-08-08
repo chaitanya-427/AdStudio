@@ -45,7 +45,7 @@ export default function MediaPlanning() {
   const ios = Array.isArray(ioData) ? ioData : (ioData?.content || []);
 
   // Line items: GET /api/line-items/all returns a plain array
-  const { data: liData, loading: ll, isMock: liIsMock, reload: reloadLineItems } = useApiData(ENDPOINTS.lineItems, MOCK_LINE_ITEMS);
+  const { data: liData, loading: ll, isMock: liIsMock, reload: reloadLineItems } = useApiData(ENDPOINTS.lineItemsAll, MOCK_LINE_ITEMS);
   const lineItems = Array.isArray(liData) ? liData : (liData?.content || []);
 
   const isMock = pIsMock || ioIsMock || liIsMock; //if any of the 3 is mock, then show mock flag

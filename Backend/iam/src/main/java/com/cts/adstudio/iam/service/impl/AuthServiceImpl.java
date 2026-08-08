@@ -113,9 +113,7 @@ public class AuthServiceImpl implements AuthService {
             modules.add("analytics");
 
         } else if (role == Role.CREATIVE_MANAGER) {
-            modules.add("campaign");
             modules.add("creative");
-
         } else if (role == Role.DELIVERY_PUBLISHER) {
             modules.add("delivery");
             modules.add("publisher");
