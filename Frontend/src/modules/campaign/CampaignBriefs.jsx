@@ -14,7 +14,7 @@ import BriefsTable from "./BriefsTable.jsx";
 import AudiencesTable from "./AudiencesTable.jsx";
 import CampaignBriefForm from "./forms/CampaignBriefForm.jsx";
 import TargetAudienceForm from "./forms/TargetAudienceForm.jsx";
-import apiRequest from "../../api/apiRequestSender.js";
+import apiClient from "../../api/apiClient.js";
 
 export default function CampaignBriefs() {
   const { user } = useAuth();
@@ -43,43 +43,38 @@ export default function CampaignBriefs() {
   // the created row into local state — the next load pulls fresh data.
 
   const handleCreateBrief = async (payload) => {
-    const url = `${API_BASE}/${ENDPOINTS.campaignBriefs}`;
-    await apiRequest(url, { method: "POST", body: payload });
+    await apiClient.post(ENDPOINTS.campaignBriefs, payload);
     window.location.reload();
   };
 
   const handleCreateAudience = async (payload) => {
-    const url = `${API_BASE}/${ENDPOINTS.targetAudiences}`;
-    await apiRequest(url, { method: "POST", body: payload });
+    await apiClient.post(ENDPOINTS.targetAudiences, payload);
     window.location.reload();
   };
 
   // ---- Status transition handlers ----
 
   const handleSubmitBrief = async (row) => {
-    const url = `${API_BASE}/api/campaign-briefs/${row.briefId}/submit`;
-    await apiRequest(url, { method: "POST" });
+    const customEndPoint = `api/campaign-briefs/${row.briefId}/submit`;
+    await apiClient.post(customEndPoint);
     window.location.reload();
   };
 
   // Approve/Reject now go through the real decision endpoint, which
   // records who reviewed it (reviewerId) and blocks self-approval on
   // the backend. This replaces the old direct-status-update shortcut.
-  const handleApproveBrief = async (row) => {
-    const url = `${API_BASE}/api/campaign-briefs/${row.briefId}/decision`;
-    await apiRequest(url, {
-      method: "POST",
-      body: { reviewerId: user?.userId, decision: "Approved" },
-    });
+  const handleApproveBrief = async (row) => { // test-thiss
+    const customEndPoint = `api/campaign-briefs/${row.briefId}/decision`;
+    await apiClient.post(customEndPoint,  
+      { reviewerId: user?.userId, decision: "Approved" } );
     window.location.reload();
   };
 
   const handleRejectBrief = async (row) => {
-    const url = `${API_BASE}/api/campaign-briefs/${row.briefId}/decision`;
-    await apiRequest(url, {
-      method: "POST",
-      body: { reviewerId: user?.userId, decision: "Rejected" },
-    });
+    const customEndPoint = `api/campaign-briefs/${row.briefId}/decision`;
+
+    await apiClient.post(customEndPoint,  
+      { reviewerId: user?.userId, decision: "Rejected" } );
     window.location.reload();
   };
 

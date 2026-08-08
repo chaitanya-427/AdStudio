@@ -4,8 +4,7 @@ import StatusBadge from "../../../components/StatusBadge.jsx";
 import { Loader } from "../../../components/Loader.jsx";
 import { IcCheck } from "../../../assets/icons.jsx";
 import PacingCell from "./PacingCell.jsx";
-import { API_BASE } from "../../../api/endpoints.js";
-import apiRequest from "../../../api/apiRequestSender.js";
+import apiClient from "../../../api/apiClient.js";
 
 const ALERT_TONE = {
   UnderDelivery: "badge-red",
@@ -38,19 +37,17 @@ function humanize(str) {
 export default function PacingAlertsTable({ alerts, loading, reload_doer }) {
 
  const handleAction = async (particular_alert_id) => {
-     const url = `${API_BASE}/api/pacing-alerts/${particular_alert_id}/action`;
-     await apiRequest(url, {
-       method: "PUT"
-     });
-  reload_doer(); // Call the reload function to refresh the data
+     const customEndPoint = `api/pacing-alerts/${particular_alert_id}/action`;
+
+     await apiClient.put(customEndPoint)
+     reload_doer(); // Call the reload function to refresh the data
 };
 
  const handleClose = async (particular_alert_id) => {
-     const url = `${API_BASE}/api/pacing-alerts/${particular_alert_id}/close`;
-     await apiRequest(url, {
-       method: "PUT"
-     });
-  reload_doer(); // Call the reload function to refresh the data
+     const customEndPoint = `api/pacing-alerts/${particular_alert_id}/close`;
+    
+    await apiClient.put(customEndPoint)
+    reload_doer(); // Call the reload function to refresh the data
 };
 
   const columns = [

@@ -4,9 +4,8 @@ import { Loader } from "../../../components/Loader.jsx";
 import { IcCheck, IcClose, IcTarget } from "../../../assets/icons.jsx";
 import { useState } from "react";
 import DecisionFeedbackModal from "../forms/DecisionFeedbackModal.jsx";
-import apiRequest from "../../../api/apiRequestSender.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
-import { API_BASE } from "../../../api/endpoints.js";
+import apiClient from "../../../api/apiClient.js";
 
 // The backend sends status as SCREAMING_SNAKE_CASE (e.g. "PENDING_APPROVAL"),
 // but StatusBadge's colour map + "Pending" mock fallback both use PascalCase
@@ -38,15 +37,15 @@ export default function ApprovalsTab({ approvals, loading, onRequestLink, links 
 
     setSubmitting(true);
     try {
-      const url = `${API_BASE}/api/creative-approvals/${row.assetId}/decision`;
-      await apiRequest(url, {
-        method: "PUT",
-        body: {
+      const customEndPoint = `api/creative-approvals/${row.assetId}/decision`;
+      
+       await apiClient.post(customEndPoint,  
+            {
           reviewerId: user.userId,
           decision,
           feedback: feedbackVal,
-        },
-      });
+        } );
+
       window.location.reload();
     } finally {
       setSubmitting(false);

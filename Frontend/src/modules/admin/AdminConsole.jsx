@@ -11,7 +11,7 @@ import {
   IcFmtBanner, IcFmtVideo, IcFmtNative, IcFmtAudio, IcFmtRich, IcFmtText,
 } from "../../assets/icons.jsx";
 import { MOCK_USERS, MOCK_AUDIT_LOGS, MOCK_CHANNELS } from "../../data/mockData.js";
-import apiRequest from "../../api/apiRequestSender.js";
+import apiClient from "../../api/apiClient.js";
 
 const ROLE_LABEL = {
   Admin: "Ad Ops Admin", AdvertiserBrand: "Advertiser", MediaPlanner: "Media Planner",
@@ -26,8 +26,8 @@ const handleStatusChange = async(newStatus, userId) => {
 
   console.log("came", newStatus, " --- ", userId);
   
-   const url = `${API_BASE}/api/auth/users/${userId}/status?status=${newStatus}`;
-      await apiRequest(url, { method: "PUT" });
+   const customEndPoint = `api/auth/users/${userId}/status?status=${newStatus}`;
+  await apiClient.put(customEndPoint);
   window.location.reload();
 
 }

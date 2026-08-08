@@ -4,9 +4,9 @@ import apiClient from "../../../api/apiClient.js";
 import { ENDPOINTS } from "../../../api/endpoints.js";
 
 // If you ever need to call a full/absolute URL instead of a path relative
-// to API_BASE (e.g. a different service), apiRequest.js is available too:
-//   import apiRequest from "../../../api/apiRequest.js";
-//   await apiRequest(`${SOME_OTHER_BASE}/delivery-records`, { method: "POST", body: payload });
+// to API_BASE (e.g. a different service), .js is available too:
+//   import  from "../../../api/.js";
+//   await (`${SOME_OTHER_BASE}/delivery-records`, { method: "POST", body: payload });
 
 // NOTE: adjust these two option lists to match whatever your Java enums
 // (DeliverySource / DeliveryStatus, or similar) actually send/expect.
