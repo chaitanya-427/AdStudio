@@ -21,7 +21,7 @@ export function formatNumber(n) {
 
 
 
-// for analytics table
+// <<<<<<<<<<--------- for analytics table  --------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const CHANNELS = ["Display", "Video", "Social", "Search", "OOH"];
 
 export function getChannelPerformance(lineItems = []) {
@@ -82,5 +82,22 @@ export function getSpendByChannel(lineItems) {
   return CHANNELS.map((label) => ({
     label,
     value: Math.round(totals[label] * 100) / 100,
+  }));
+}
+
+const CHANNEL_COLORS = [
+  "#1f4396",
+  "#3d8bff",
+  "#5fa3ff",
+  "#94c2ff",
+  "#c9ddff",
+];
+
+export function getSpendByChannelWithColor(lineItems) {
+  const data = getSpendByChannel(lineItems);
+
+  return data.map((item, index) => ({
+    ...item,
+    color: CHANNEL_COLORS[index] || "#c9ddff", // fallback if channels > colors
   }));
 }
