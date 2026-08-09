@@ -12,14 +12,15 @@ import AdvertiserForm from "./form/AdvertiserForm.jsx";
 import BrandForm from "./form/BrandForm.jsx";
 import AdvertisersTable from "./AdvertisersTable.jsx";
 import BrandGrid from "./BrandGrid.jsx";
+import apiClient from "../../api/apiClient.js";
 
 /* ---------------------------------------------------------------------- */
 /*  Main page                                                              */
 /* ---------------------------------------------------------------------- */
 export default function AdvertiserPortal() {
   const [tab, setTab] = useState("advertisers");
-const { data: advertisers, loading: la, isMock, reload: refetchAdvertisers } = useApiData(ENDPOINTS.advertisers, MOCK_ADVERTISERS);
-const { data: brands, loading: lb, reload: refetchBrands } = useApiData(ENDPOINTS.brands, MOCK_BRANDS);
+  const { data: advertisers, loading: la, isMock, reload: refetchAdvertisers } = useApiData(ENDPOINTS.advertisers, MOCK_ADVERTISERS);
+  const { data: brands, loading: lb, reload: refetchBrands } = useApiData(ENDPOINTS.brands, MOCK_BRANDS);
 
   const [advertiserModal, setAdvertiserModal] = useState(null); // null | {} (new) | advertiser (edit)
   const [brandModal, setBrandModal] = useState(null);
@@ -34,9 +35,29 @@ const { data: brands, loading: lb, reload: refetchBrands } = useApiData(ENDPOINT
     refetchAdvertisers?.();
   };
 
+  const handleDeleteAdvertiser = async (advertiser) => {
+    if (!window.confirm(`Delete advertiser "${advertiser.companyName}"? This cannot be undone.`)) return;
+    try {
+      await apiClient.del(`api/advertisers/${advertiser.advertiserId}`);
+      refetchAdvertisers?.();
+    } catch (e) {
+      alert(e.message || "Failed to delete advertiser.");
+    }
+  };
+
   const handleBrandSaved = () => {
     setBrandModal(null);
     refetchBrands?.();
+  };
+
+  const handleDeleteBrand = async (brand) => {
+    if (!window.confirm(`Delete brand "${brand.brandName}"? This will also delete its campaign briefs and target audiences. This cannot be undone.`)) return;
+    try {
+      await apiClient.del(`api/brands/${brand.brandId}`);
+      refetchBrands?.();
+    } catch (e) {
+      alert(e.message || "Failed to delete brand.");
+    }
   };
 
   return (
@@ -61,11 +82,11 @@ const { data: brands, loading: lb, reload: refetchBrands } = useApiData(ENDPOINT
       <div className="toolbar"><Tabs tabs={tabs} active={tab} onChange={setTab} /></div>
 
       {tab === "advertisers" && (
-        <AdvertisersTable advertisers={advertisers} loading={la} onEdit={setAdvertiserModal} />
+        <AdvertisersTable advertisers={advertisers} loading={la} onEdit={setAdvertiserModal} onDelete={handleDeleteAdvertiser} />
       )}
 
       {tab === "brands" && (
-        <BrandGrid brands={brands} loading={lb} onSelect={setBrandModal} advertisers={advertisers} />
+        <BrandGrid brands={brands} loading={lb} onSelect={setBrandModal} onDelete={handleDeleteBrand} advertisers={advertisers} />
       )}
 
       {advertiserModal && (

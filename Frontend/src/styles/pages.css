@@ -55,6 +55,28 @@
   padding: 20px;
   box-shadow: var(--shadow-sm);
   transition: transform 0.16s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.bc-delete {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.bc-delete:hover {
+  background: #FEE2E2;
+  color: #DC2626;
 }
 .brand-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .brand-card .bc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }

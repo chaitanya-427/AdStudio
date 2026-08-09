@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.cts.advertiser.entity.Advertiser;
 import com.cts.advertiser.entity.Brand;
 import com.cts.advertiser.repository.BrandRepository;
+import com.cts.advertiser.repository.CampaignBriefApprovalRepository;
+import com.cts.advertiser.repository.TargetAudienceRepository;
 import com.cts.advertiser.shared.NotificationClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
     private final StatusTransitionValidator statusTransitionValidator;
     private final NotificationClient notificationClient;
     private final BrandRepository brandRepository;
+    private final TargetAudienceRepository targetAudienceRepository;
+    private final CampaignBriefApprovalRepository campaignBriefApprovalRepository;
 
     // Converts request DTO to entity and saves to database
     @Override
@@ -126,7 +130,6 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
 
         // Approve/Reject must go through the dedicated decision workflow
         // (POST /{id}/decision), which records a reviewer and blocks self-approval.
-        // This generic endpoint is only for other transitions (e.g. Active -> Completed).
         if (targetStatus == CampaignBrief.CampaignStatus.Approved
                 || targetStatus == CampaignBrief.CampaignStatus.Rejected) {
             throw new IllegalArgumentException(
@@ -148,17 +151,23 @@ public class CampaignBriefServiceImpl implements CampaignBriefService {
 
     }
 
-    // Deletes campaign brief by ID or throws exception if not found
+    // Deletes a campaign brief and cascades the delete down to its target
+    // audiences and approval history first, so no orphaned rows remain.
     @Override
     @Transactional
     public void deleteCampaignBrief(Integer id) {
         CampaignBrief brief = campaignBriefRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Campaign Brief not found with ID: " + id));
 
+        campaignBriefApprovalRepository.deleteAll(
+                campaignBriefApprovalRepository.findByBriefId(id));
+        targetAudienceRepository.deleteAll(
+                targetAudienceRepository.findByBriefId(id));
+
         campaignBriefRepository.deleteById(id);
 
         notificationClient.notify(brief.getSubmittedById(),
-                "Campaign Brief #" + id + " was deleted.",
+                "Campaign Brief #" + id + " and its target audiences were deleted.",
                 "Brief");
     }
 

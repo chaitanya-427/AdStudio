@@ -2,7 +2,7 @@ import React from "react";
 import DataTable from "../../components/DataTable.jsx";
 import StatusBadge from "../../components/StatusBadge.jsx";
 import { Loader } from "../../components/Loader.jsx";
-import { IcCheck, IcClose, IcSend } from "../../assets/icons.jsx";
+import { IcCheck, IcClose, IcSend, IcTrash } from "../../assets/icons.jsx";
 import { formatCompact } from "../../api/utils/format.js";
 import "./forms-and-modal.css";
 
@@ -13,20 +13,7 @@ const OBJECTIVE_TONE = {
   Retention: "badge-amber",
 };
 
-/**
- * Renders the Campaign Briefs table, including the status-driven row
- * actions (Submit / Approve / Reject).
- *
- * Props:
- *  - rows: array of brief objects
- *  - loading: boolean
- *  - onSubmit: (row) => void   -> called when "Submit" is clicked (Draft -> Submitted)
- *  - onApprove: (row) => void  -> called when "Approve" is clicked. Pass
- *      undefined to hide the button entirely (e.g. non-Admin users).
- *  - onReject: (row) => void   -> called when "Reject" is clicked. Pass
- *      undefined to hide the button entirely (e.g. non-Admin users).
- */
-export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReject }) {
+export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReject, onDelete }) {
   const columns = [
     {
       key: "briefId",
@@ -52,7 +39,11 @@ export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReje
       label: "Objective",
       render: (r) => <span className={`badge ${OBJECTIVE_TONE[r.objective] || "badge-gray"}`}>{r.objective}</span>,
     },
-   
+    {
+      key: "channelPreference",
+      label: "Channels",
+      render: (r) => <span className="cell-muted">{r.channelPreference || "—"}</span>,
+    },
     {
       key: "flight",
       label: "Flight",
@@ -75,37 +66,41 @@ export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReje
       label: "",
       align: "right",
       render: (r) => {
+        let statusAction = null;
         if (r.status === "Draft") {
-          return (
-            <div className="t-actions">
-              <button className="btn btn-outline btn-sm" onClick={() => onSubmit?.(r)}>
-                <IcSend size={14} /> Submit
-              </button>
-            </div>
+          statusAction = (
+            <button className="btn btn-outline btn-sm" onClick={() => onSubmit?.(r)}>
+              <IcSend size={14} /> Submit
+            </button>
           );
-        }
-        if (r.status === "Submitted") {
-          // Approve/Reject only render when a handler was actually passed
-          // in — CampaignBriefs.jsx only passes them for Admin users.
-          if (!onApprove && !onReject) {
-            return <span className="cell-muted txt-sm">Awaiting review</span>;
+        } else if (r.status === "Submitted") {
+          if (onApprove || onReject) {
+            statusAction = (
+              <>
+                {onApprove && (
+                  <button className="btn btn-success btn-sm" onClick={() => onApprove(r)}>
+                    <IcCheck size={14} /> Approve
+                  </button>
+                )}
+                {onReject && (
+                  <button className="btn btn-danger btn-sm" onClick={() => onReject(r)}>
+                    <IcClose size={14} /> Reject
+                  </button>
+                )}
+              </>
+            );
+          } else {
+            statusAction = <span className="cell-muted txt-sm">Awaiting review</span>;
           }
-          return (
-            <div className="t-actions">
-              {onApprove && (
-                <button className="btn btn-success btn-sm" onClick={() => onApprove(r)}>
-                  <IcCheck size={14} /> Approve
-                </button>
-              )}
-              {onReject && (
-                <button className="btn btn-danger btn-sm" onClick={() => onReject(r)}>
-                  <IcClose size={14} /> Reject
-                </button>
-              )}
-            </div>
-          );
         }
-        return <span className="cell-muted txt-sm">—</span>;
+        return (
+          <div className="t-actions">
+            {statusAction}
+            <button className="btn btn-ghost btn-sm" onClick={() => onDelete?.(r)}>
+              <IcTrash size={14} /> Delete
+            </button>
+          </div>
+        );
       },
     },
   ];

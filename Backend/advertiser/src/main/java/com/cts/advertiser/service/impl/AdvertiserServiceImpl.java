@@ -3,6 +3,12 @@ package com.cts.advertiser.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cts.advertiser.entity.Brand;
+import com.cts.advertiser.entity.CampaignBrief;
+import com.cts.advertiser.repository.BrandRepository;
+import com.cts.advertiser.repository.CampaignBriefApprovalRepository;
+import com.cts.advertiser.repository.CampaignBriefRepository;
+import com.cts.advertiser.repository.TargetAudienceRepository;
 import com.cts.advertiser.shared.NotificationClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AdvertiserServiceImpl implements AdvertiserService {
-    
+
     // Injected automatically by Spring via @RequiredArgsConstructor
     private final AdvertiserRepository advertiserRepository;
+    private final BrandRepository brandRepository;
+    private final CampaignBriefRepository campaignBriefRepository;
+    private final TargetAudienceRepository targetAudienceRepository;
+    private final CampaignBriefApprovalRepository campaignBriefApprovalRepository;
     private final NotificationClient notificationClient;
 
     // Converts request DTO to entity and saves to database
@@ -30,11 +40,11 @@ public class AdvertiserServiceImpl implements AdvertiserService {
     @Transactional
     public AdvertiserResponse createAdvertiser(AdvertiserRequest request) {
         Advertiser advertiser = Advertiser.builder()
-            .companyName(request.getCompanyName())
-            .industry(request.getIndustry())
-            .accountManagerId(request.getAccountManagerId())
-            .annualBudget(request.getAnnualBudget())
-            .build();
+                .companyName(request.getCompanyName())
+                .industry(request.getIndustry())
+                .accountManagerId(request.getAccountManagerId())
+                .annualBudget(request.getAnnualBudget())
+                .build();
 
         Advertiser saved = advertiserRepository.save(advertiser);
 
@@ -49,9 +59,9 @@ public class AdvertiserServiceImpl implements AdvertiserService {
     @Override
     public List<AdvertiserResponse> getAllAdvertiser() {
         return advertiserRepository.findAll()
-            .stream()
-            .map(this::mapToResponse)
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     // Finds advertiser by ID or throws exception if not found
@@ -73,9 +83,7 @@ public class AdvertiserServiceImpl implements AdvertiserService {
         advertiser.setIndustry(request.getIndustry());
         advertiser.setAccountManagerId(request.getAccountManagerId());
         advertiser.setAnnualBudget(request.getAnnualBudget());
-        if (request.getStatus() != null) {
-            advertiser.setStatus(Advertiser.AdvertiserStatus.valueOf(request.getStatus()));
-        }
+
 
         Advertiser updated = advertiserRepository.save(advertiser);
 
@@ -87,17 +95,38 @@ public class AdvertiserServiceImpl implements AdvertiserService {
 
     }
 
-    // Deletes advertiser by ID or throws exception if not found
+    // Deletes an advertiser and cascades the delete down to every dependent
+    // record: brands under it, campaign briefs under those brands, and
+    // target audiences + approval history under those briefs. Deletes
+    // child-first, in the order approvals -> audiences -> briefs -> brands
+    // -> advertiser, so we never leave orphaned rows behind.
     @Override
     @Transactional
     public void deleteAdvertiser(Integer id) {
         Advertiser advertiser = advertiserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Advertiser not found with ID: " + id));
 
+        List<Brand> brands = brandRepository.findByAdvertiserId(id);
+
+        for (Brand brand : brands) {
+            List<CampaignBrief> briefs = campaignBriefRepository.findByBrandId(brand.getBrandId());
+
+            for (CampaignBrief brief : briefs) {
+                campaignBriefApprovalRepository.deleteAll(
+                        campaignBriefApprovalRepository.findByBriefId(brief.getBriefId()));
+                targetAudienceRepository.deleteAll(
+                        targetAudienceRepository.findByBriefId(brief.getBriefId()));
+            }
+
+            campaignBriefRepository.deleteAll(briefs);
+        }
+
+        brandRepository.deleteAll(brands);
+
         advertiserRepository.deleteById(id);
 
         notificationClient.notify(advertiser.getAccountManagerId(),
-                "Advertiser #" + id + " was deleted.",
+                "Advertiser #" + id + " and all its brands, campaign briefs, and target audiences were deleted.",
                 "Advertiser");
     }
 

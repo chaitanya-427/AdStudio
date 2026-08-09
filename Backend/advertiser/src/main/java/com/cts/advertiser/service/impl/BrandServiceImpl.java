@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
+import com.cts.advertiser.entity.CampaignBrief;
+import com.cts.advertiser.repository.CampaignBriefApprovalRepository;
+import com.cts.advertiser.repository.CampaignBriefRepository;
+import com.cts.advertiser.repository.TargetAudienceRepository;
 import com.cts.advertiser.shared.NotificationClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +27,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BrandServiceImpl implements BrandService{
-    
+
     // Inject automatically by Spring via @RequiredArgsConstructor
     private final BrandRepository brandRepository;
     private final AdvertiserRepository advertiserRepository;
+    private final CampaignBriefRepository campaignBriefRepository;
+    private final TargetAudienceRepository targetAudienceRepository;
+    private final CampaignBriefApprovalRepository campaignBriefApprovalRepository;
     private final NotificationClient notificationClient;
 
     // Converts request DTO to entity and saves to database
@@ -37,14 +44,14 @@ public class BrandServiceImpl implements BrandService{
         validateBudgetHeadroom(request.getAdvertiserId(), request.getAllocatedBudget(), null);
 
         Brand brand = Brand.builder()
-            .advertiserId(request.getAdvertiserId())
-            .brandName(request.getBrandName())
-            .category(request.getCategory())
-            .color(request.getColor())
-            .spentToDate(request.getSpentToDate())
-            .status(request.getStatus())
-            .allocatedBudget(request.getAllocatedBudget())
-            .build();
+                .advertiserId(request.getAdvertiserId())
+                .brandName(request.getBrandName())
+                .category(request.getCategory())
+                .color(request.getColor())
+                .spentToDate(request.getSpentToDate())
+                .status(request.getStatus())
+                .allocatedBudget(request.getAllocatedBudget())
+                .build();
 
         Brand saved = brandRepository.save(brand);
 
@@ -61,17 +68,17 @@ public class BrandServiceImpl implements BrandService{
     @Override
     public List<BrandResponse> getAllBrands() {
         return brandRepository.findAll()
-            .stream()
-            .map(this::mapToResponse)
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     // Finds brand by ID or throws exception if not found
     @Override
     public BrandResponse getBrandById(Integer id) {
-        
+
         Brand brand = brandRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Brand not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with ID: " + id));
 
         return mapToResponse(brand);
 
@@ -80,11 +87,11 @@ public class BrandServiceImpl implements BrandService{
     // Returns all brands belonging to a specific advertiser
     @Override
     public List<BrandResponse> getAllBrandsByAdvertiserId(Integer advertiserId) {
-        
+
         return brandRepository.findByAdvertiserId(advertiserId)
-            .stream()
-            .map(this::mapToResponse)
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
 
     }
 
@@ -92,9 +99,9 @@ public class BrandServiceImpl implements BrandService{
     @Override
     @Transactional
     public BrandResponse updateBrand(Integer id, BrandRequest request) {
-        
+
         Brand brand = brandRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Brand not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with ID: " + id));
 
         validateBudgetHeadroom(brand.getAdvertiserId(), request.getAllocatedBudget(), id);
 
@@ -117,18 +124,33 @@ public class BrandServiceImpl implements BrandService{
 
     }
 
-    // Deletes branch by ID or throws exception if not found
+    // Deletes a brand and cascades the delete down to every dependent
+    // record: campaign briefs under it, and the target audiences +
+    // approval history under those briefs. Deletes child-first, in the
+    // order approvals -> audiences -> briefs -> brand, so we never leave
+    // orphaned rows behind.
     @Override
     @Transactional
     public void deleteBrand(Integer id) {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found with ID: " + id));
 
+        List<CampaignBrief> briefs = campaignBriefRepository.findByBrandId(id);
+
+        for (CampaignBrief brief : briefs) {
+            campaignBriefApprovalRepository.deleteAll(
+                    campaignBriefApprovalRepository.findByBriefId(brief.getBriefId()));
+            targetAudienceRepository.deleteAll(
+                    targetAudienceRepository.findByBriefId(brief.getBriefId()));
+        }
+
+        campaignBriefRepository.deleteAll(briefs);
+
         brandRepository.deleteById(id);
 
         advertiserRepository.findById(brand.getAdvertiserId()).ifPresent(owner ->
                 notificationClient.notify(owner.getAccountManagerId(),
-                        "Brand #" + id + " was deleted.",
+                        "Brand #" + id + " and all its campaign briefs and target audiences were deleted.",
                         "Brand"));
     }
 
@@ -136,7 +158,7 @@ public class BrandServiceImpl implements BrandService{
     private void validateBudgetHeadroom(Integer advertiserId, BigDecimal requestedBudget, Integer excludeBrandId) {
 
         Advertiser advertiser = advertiserRepository.findById(advertiserId)
-            .orElseThrow(() -> new ResourceNotFoundException("Advertiser not found with ID: " + advertiserId));
+                .orElseThrow(() -> new ResourceNotFoundException("Advertiser not found with ID: " + advertiserId));
 
         if(advertiser.getAnnualBudget() == null) return;
         if(requestedBudget == null) return;
