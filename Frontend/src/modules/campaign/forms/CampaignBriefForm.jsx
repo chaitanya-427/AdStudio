@@ -112,7 +112,7 @@ export default function CampaignBriefForm({ onSubmit, onCancel, submittedById })
             </select>
             {!form.brandId && (
               <span className="adr-error" style={{ color: "var(--text-muted, #64748b)" }}>
-                Pick a brand first
+                Pick a brand
               </span>
             )}
             {errors.brandId && <span className="form-error">{errors.brandId}</span>}

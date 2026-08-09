@@ -2,12 +2,13 @@ import React, { useMemo } from "react";
 import StatusBadge from "../../components/StatusBadge.jsx";
 import ProgressBar from "../../components/ProgressBar.jsx";
 import { Loader } from "../../components/Loader.jsx";
+import { IcTrash } from "../../assets/icons.jsx";
 import { formatCompact } from "../../api/utils/format.js";
 
 /* ---------------------------------------------------------------------- */
 /*  Brands tab: card grid                                                 */
 /* ---------------------------------------------------------------------- */
-export default function BrandGrid({ brands, loading, onSelect, advertisers }) {
+export default function BrandGrid({ brands, loading, onSelect, onDelete, advertisers }) {
   
   if (loading) return <Loader />;
   return (
@@ -18,6 +19,16 @@ export default function BrandGrid({ brands, loading, onSelect, advertisers }) {
         
         return (
           <div className="brand-card" key={b.brandId} onClick={() => onSelect(b)}>
+            <button
+              type="button"
+              className="bc-delete"
+              onClick={(e) => { e.stopPropagation(); onDelete?.(b); }}
+              aria-label="Delete brand"
+              title="Delete brand"
+            >
+              <IcTrash size={15} />
+            </button>
+
             <div className="bc-top">
               <div className="bc-logo" style={{ background: b.color }}>{b.brandName[0]}</div>
               <div>

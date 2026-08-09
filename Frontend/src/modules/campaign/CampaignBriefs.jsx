@@ -6,7 +6,7 @@ import { useApiData } from "../../api/useApiData.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 import { API_BASE, ENDPOINTS } from "../../api/endpoints.js";
-import { IcCampaign, IcPlus } from "../../assets/icons.jsx";
+import { IcCampaign, IcCheckList, IcPlus, IcTarget } from "../../assets/icons.jsx";
 import { MOCK_BRIEFS, MOCK_AUDIENCES } from "../../data/mockData.js";
 
 import Modal from "./Modal.jsx";
@@ -78,10 +78,24 @@ export default function CampaignBriefs() {
     window.location.reload();
   };
 
+  const handleDeleteBrief = async (row) => {
+    if (!window.confirm(`Delete campaign brief "${row.campaignName}"? This will also delete its target audiences. This cannot be undone.`)) return;
+    const customEndPoint = `api/campaign-briefs/${row.briefId}`;
+    await apiClient.del(customEndPoint);
+    window.location.reload();
+  };
+
+  const handleDeleteAudience = async (row) => {
+    if (!window.confirm(`Delete target audience #${row.audienceId}? This cannot be undone.`)) return;
+    const customEndPoint = `api/target-audiences/${row.audienceId}`;
+    await apiClient.del(customEndPoint);
+    window.location.reload();
+  };
+
   return (
     <div className="page">
       <PageHeader
-        Icon={IcCampaign}
+        Icon={IcCheckList}
         title="Campaign Planning & Briefing"
         subtitle="Capture briefs, objectives and target audiences, then run the approval workflow"
         actions={
@@ -109,9 +123,10 @@ export default function CampaignBriefs() {
             onSubmit={handleSubmitBrief}
             onApprove={isAdmin ? handleApproveBrief : undefined}
             onReject={isAdmin ? handleRejectBrief : undefined}
+            onDelete={handleDeleteBrief}
           />
         ) : (
-          <AudiencesTable rows={audiences} loading={la} />
+          <AudiencesTable rows={audiences} loading={la} onDelete={handleDeleteAudience} />
         )}
       </div>
 
