@@ -93,7 +93,7 @@ public class SecurityConfig {
                 // BRAND
                 // =============================================
                         .pathMatchers(HttpMethod.GET, "/api/brands/**")
-                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "CREATIVE_MANAGER","FINANCE_EXECUTIVE", "ADMIN")
                         .pathMatchers("/api/brands/**")
                         .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
 
@@ -101,7 +101,7 @@ public class SecurityConfig {
                 // CAMPAIGN BRIEF
                 // =============================================
                         .pathMatchers(HttpMethod.GET, "/api/campaign-briefs/**")
-                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "CREATIVE_MANAGER", "FINANCE_EXECUTIVE", "ADMIN")
                         .pathMatchers(HttpMethod.POST,
                                 "/api/campaign-briefs/*/decision",
                                 "/api/campaign-briefs/*/activate")

@@ -37,7 +37,7 @@ export default function CreativeStudio() {
 
   const { data: brands } = useApiData(ENDPOINTS.brands, MOCK_BRANDS);
   const { data: briefs } = useApiData(ENDPOINTS.campaignBriefs, MOCK_BRIEFS);
-  const { data: lineItems } = useApiData(ENDPOINTS.lineItemsAll , MOCK_LINE_ITEMS); //useAllffLineItems(MOCK_LINE_ITEMS);
+  const { data: lineItems } = useApiData(ENDPOINTS.lineItemsAll , MOCK_LINE_ITEMS);
   const { data: users } = useApiData(ENDPOINTS.adminUsers, MOCK_USERS);
 
   const [showUploadForm, setShowUploadForm] = useState(false);

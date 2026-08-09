@@ -39,7 +39,7 @@ export default function ApprovalsTab({ approvals, loading, onRequestLink, links 
     try {
       const customEndPoint = `api/creative-approvals/${row.assetId}/decision`;
       
-       await apiClient.post(customEndPoint,  
+       await apiClient.put(customEndPoint,  
             {
           reviewerId: user.userId,
           decision,
