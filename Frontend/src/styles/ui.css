@@ -257,6 +257,7 @@
 }
 table.data {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   font-size: 13px;
 }

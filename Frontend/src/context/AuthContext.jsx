@@ -71,7 +71,6 @@ export function AuthProvider({ children }) {
       if (!res.ok) throw new Error("backend login failed");
       const json = await res.json();
       const payload = json.data || json;
-      console.log("here ---->>> ",payload);
       
       setToken(payload.token || "live-session");
       const u = payload.user || {
@@ -89,6 +88,7 @@ export function AuthProvider({ children }) {
       return { ok: true, demo: true };
     }
   }, []);
+
 
   /* ---- register ---- */
 const register = useCallback(async (name, email, phone, role, password) => {
