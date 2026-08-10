@@ -105,7 +105,7 @@ export default function MediaPlanForm({ initial, onCancel, onSaved }) {
               className="universal-input"
               value={form.channelMix}
               onChange={set("channelMix")}
-              placeholder="Display, Video, Social"
+              placeholder="Display, Video, Social, Search, OOH, Print, Radio"
             />
           </div>
 

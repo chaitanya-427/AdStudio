@@ -25,11 +25,15 @@ export default function InsertionOrderForm({ initial, onCancel, onSaved }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // AUTO-CALCULATED: orderValue = (committedImpressions / 1000) * the line item's CPM
+  //(committedImpressions / 1000)
   const computedValue = (Number(form.committedImpressions || 0) / 1000) * Number(liCpm || 0);
 
   const fetchLineItem = async (id) => {
-    if (!id) { setLiInfo(null); setLiCpm(0); return; }
+    if (!id) 
+      { setLiInfo(null); 
+        setLiCpm(0); 
+        return; 
+      }
     try {
       const li = await apiClient.get(`api/line-items/${id}`);
       setLiInfo(li);
@@ -43,13 +47,13 @@ export default function InsertionOrderForm({ initial, onCancel, onSaved }) {
       setError("");
     } catch {
       setLiInfo(null); setLiCpm(0);
-      setError(`Line item #${id} not found — check the ID.`);
+      setError(`Line Item #${id} not found — check the ID.`);
     }
   };
 
   useEffect(() => {
-    if (initial?.lineItemId) fetchLineItem(initial.lineItemId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (initial?.lineItemId) 
+      fetchLineItem(initial.lineItemId);
   }, []);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -58,7 +62,7 @@ export default function InsertionOrderForm({ initial, onCancel, onSaved }) {
     e.preventDefault();
     setError("");
     if (form.endDate <= form.startDate) { setError("End date must be after start date."); return; }
-    if (computedValue <= 0) { setError("Enter a valid Line Item ID and committed impressions first."); return; }
+    if (computedValue <= 0) { setError("Enter a valid Line Item ID and Committed Impressions first."); return; }
     setSaving(true);
     try {
       await apiClient.post("api/insertion-orders", {
@@ -131,7 +135,7 @@ export default function InsertionOrderForm({ initial, onCancel, onSaved }) {
               />
             </div>
             <div className="universal-field">
-              <label className="universal-label">Order Value (auto)</label>
+              <label className="universal-label">Order Value</label>
               <input
                 className="universal-input"
                 type="number"
@@ -176,6 +180,7 @@ export default function InsertionOrderForm({ initial, onCancel, onSaved }) {
             </div>
           </div>
 
+          <br/>
           {liInfo && (
             <p className="universal-subtitle" style={{ marginTop: "-8px" }}>
               Line Item #{liInfo.lineItemId}: {liInfo.channel} · {liInfo.publisher} · CPM ₹{liInfo.cpm}.
