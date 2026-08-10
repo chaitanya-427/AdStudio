@@ -98,7 +98,7 @@ export default function DashboardOverview({ countCamp=0 , alerts}) {
                   <div className="ll" key={m.label}>
                     <span className="sw" style={{ background: m.color }} />
                     <span className="lt">{m.label}</span>
-                    <span className="lv">{m.value}%</span>
+                    <span className="lv">{((m.value/totalSpend) *100 ).toFixed(2)}%</span>
                   </div>
                 ))}
               </div>
