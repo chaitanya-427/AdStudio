@@ -26,7 +26,7 @@ function buildHeaders(extra = {}) {
   return headers;
 }
 
-/** Unwrap { success, data, message } -> data, else return body as-is. */
+// Unwrap { success, data, message } -> data, else return body
 function unwrap(body) {
   if (body && typeof body === "object" && "data" in body && "success" in body) {
     if (body.success === false) {
@@ -48,7 +48,6 @@ async function request(path, options = {}) {
       const j = await res.json();
       msg = j.message || msg;
     } catch (_) {
-      /* ignore */
     }
     throw new Error(msg);
   }

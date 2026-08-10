@@ -60,7 +60,6 @@ export function useApiData(endpoint, mockData, deps = []) {
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, ...deps]);
 
   useEffect(() => {

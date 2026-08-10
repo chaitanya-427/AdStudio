@@ -21,7 +21,7 @@ export default function LineItemForm({ plans, initialPlanId, onCancel, onSaved }
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // AUTO-CALCULATED: budget = (impressions / 1000) * CPM
+  //(impressions / 1000) * CPM
   const computedBudget = (Number(form.plannedImpressions || 0) / 1000) * Number(form.cpm || 0);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -70,7 +70,7 @@ export default function LineItemForm({ plans, initialPlanId, onCancel, onSaved }
           <div className="universal-field">
             <label className="universal-label">Media Plan</label>
             <select className="universal-select" value={form.planId} onChange={set("planId")} required>
-              <option value="">-- choose a plan --</option>
+              <option value="">-- Choose a Plan --</option>
               {plans.map((p) => (
                 <option key={p.planId} value={p.planId}>#{p.planId} — Brief #{p.briefId}</option>
               ))}
@@ -118,7 +118,7 @@ export default function LineItemForm({ plans, initialPlanId, onCancel, onSaved }
               />
             </div>
             <div className="universal-field">
-              <label className="universal-label">Cost Per Thousand Imprsns</label>
+              <label className="universal-label">Cost Per Thousand</label>
               <input
                 className="universal-input"
                 required
@@ -131,7 +131,7 @@ export default function LineItemForm({ plans, initialPlanId, onCancel, onSaved }
           </div>
 
           <div className="universal-field">
-            <label className="universal-label">Planned Budget (auto)</label>
+            <label className="universal-label">Planned Budget</label>
             <input
               className="universal-input"
               type="number"
