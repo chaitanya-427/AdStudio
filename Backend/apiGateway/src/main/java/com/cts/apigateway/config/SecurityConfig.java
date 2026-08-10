@@ -74,7 +74,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
 
-                        .pathMatchers(HttpMethod.GET, "/api/auth/users").authenticated() 
+                        .pathMatchers(HttpMethod.GET, "/api/auth/users").authenticated()
                         .pathMatchers(HttpMethod.PUT, "/api/auth/users/**").authenticated()
                         .pathMatchers(HttpMethod.GET, "/api/auth/eligibility-list").authenticated()
 

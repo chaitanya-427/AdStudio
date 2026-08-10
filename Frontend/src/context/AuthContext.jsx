@@ -136,13 +136,16 @@ const register = useCallback(async (name, email, phone, role, password) => {
     reloadEligibility: loadEligibility,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>; // provider part = INput
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+   // consumer part
+  const contextValue = useContext(AuthContext);
+  // this `context-Value` is the resultant/OUTput of the consumer-part 
+
+  if (!contextValue) throw new Error("useAuth must be used within AuthProvider");
+  return contextValue;
 }
 
 export default AuthContext;

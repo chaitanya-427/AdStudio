@@ -12,7 +12,7 @@ function initials(name = "") {
 }
 
 export default function Navbar({ onBurger }) {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth(); // actual usage and consumer part of authContext.jsx / authProver
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
