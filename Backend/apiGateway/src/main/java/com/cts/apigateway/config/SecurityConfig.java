@@ -74,8 +74,11 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
 
+                        .pathMatchers(HttpMethod.GET, "/api/auth/users").authenticated() 
+                        .pathMatchers(HttpMethod.PUT, "/api/auth/users/**").authenticated()
+                        .pathMatchers(HttpMethod.GET, "/api/auth/eligibility-list").authenticated()
 
-                            // =============================================
+                                // =============================================
                             // AUDIT LOG SERVICE (/api/audit-logs/**)
                             // - ADMIN only
                             // =============================================
@@ -93,7 +96,7 @@ public class SecurityConfig {
                 // BRAND
                 // =============================================
                         .pathMatchers(HttpMethod.GET, "/api/brands/**")
-                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "CREATIVE_MANAGER","FINANCE_EXECUTIVE", "ADMIN")
                         .pathMatchers("/api/brands/**")
                         .hasAnyRole("BRAND_ADVERTISER", "ADMIN")
 
@@ -101,7 +104,7 @@ public class SecurityConfig {
                 // CAMPAIGN BRIEF
                 // =============================================
                         .pathMatchers(HttpMethod.GET, "/api/campaign-briefs/**")
-                        .hasAnyRole("BRAND_ADVERTISER", "MEDIA_PLANNER", "FINANCE_EXECUTIVE", "ADMIN")
+                        .authenticated()
                         .pathMatchers(HttpMethod.POST,
                                 "/api/campaign-briefs/*/decision",
                                 "/api/campaign-briefs/*/activate")
@@ -135,7 +138,7 @@ public class SecurityConfig {
                             "/api/delivery-records/**",
                             "/api/pacing-alerts/**"
                     )
-                    .hasAnyRole("DELIVERY_PUBLISHER", "ADMIN")
+                    .authenticated()
 
                         // =============================================
                         // FINANCE / CLIENT BILLING MODULE
@@ -160,7 +163,7 @@ public class SecurityConfig {
                     "/api/line-items/**",
                     "/api/insertion-orders/**"
             )
-            .hasAnyRole("MEDIA_PLANNER","DELIVERY_PUBLISHER","ADMIN")
+            .authenticated()
 
         // =============================================
         // DELIVERY RECORD MODULE
