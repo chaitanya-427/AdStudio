@@ -4,6 +4,7 @@ import Tabs from "../../components/Tabs.jsx";
 import { MockFlag } from "../../components/Loader.jsx";
 import { useApiData } from "../../api/useApiData.js";
 import { useAuth } from "../../context/AuthContext.jsx";
+import StatusBadge from "../../components/StatusBadge.jsx";
 
 import { API_BASE, ENDPOINTS } from "../../api/endpoints.js";
 import { IcCampaign, IcCheckList, IcPlus, IcTarget } from "../../assets/icons.jsx";
@@ -25,6 +26,7 @@ export default function CampaignBriefs() {
 
   const [briefModalOpen, setBriefModalOpen] = useState(false);
   const [audienceModalOpen, setAudienceModalOpen] = useState(false);
+  const [historyModal, setHistoryModal] = useState(null); // null | { campaignName, records }
 
   const briefs = briefsData || [];
   const audiences = audiencesData || [];
@@ -92,6 +94,18 @@ export default function CampaignBriefs() {
     window.location.reload();
   };
 
+  const handleActivateBrief = async (row) => {
+    const customEndPoint = `api/campaign-briefs/${row.briefId}/activate`;
+    await apiClient.post(customEndPoint);
+    window.location.reload();
+  };
+
+  const handleViewHistory = async (row) => {
+    const customEndPoint = `api/campaign-briefs/${row.briefId}/approval-history`;
+    const records = await apiClient.get(customEndPoint);
+    setHistoryModal({ campaignName: row.campaignName, records: records || [] });
+  };
+
   return (
     <div className="page">
       <PageHeader
@@ -123,7 +137,9 @@ export default function CampaignBriefs() {
             onSubmit={handleSubmitBrief}
             onApprove={isAdmin ? handleApproveBrief : undefined}
             onReject={isAdmin ? handleRejectBrief : undefined}
+            onActivate={isAdmin ? handleActivateBrief : undefined}
             onDelete={handleDeleteBrief}
+            onViewHistory={handleViewHistory}
           />
         ) : (
           <AudiencesTable rows={audiences} loading={la} onDelete={handleDeleteAudience} />
@@ -141,6 +157,25 @@ export default function CampaignBriefs() {
           onCancel={() => setAudienceModalOpen(false)}
         />
       </Modal>
+
+      {historyModal && (
+        <Modal open={!!historyModal} title={`Approval history — ${historyModal.campaignName}`} onClose={() => setHistoryModal(null)}>
+          {historyModal.records.length === 0 ? (
+            <p className="cell-muted">No approval decisions recorded yet.</p>
+          ) : (
+            historyModal.records.map((rec) => (
+              <div key={rec.approvalId} style={{ marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--line-soft)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                  <StatusBadge status={rec.decision} />
+                  <span className="cell-muted txt-sm">Reviewer #{rec.reviewerId}</span>
+                </div>
+                {rec.comments && <div className="cell-muted txt-sm" style={{ marginBottom: 4 }}>{rec.comments}</div>}
+                <div className="cell-muted txt-sm">{new Date(rec.reviewedAt).toLocaleString()}</div>
+              </div>
+            ))
+          )}
+        </Modal>
+      )}
     </div>
   );
 }

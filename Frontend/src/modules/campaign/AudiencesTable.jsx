@@ -1,6 +1,5 @@
 import React from "react";
 import DataTable from "../../components/DataTable.jsx";
-import StatusBadge from "../../components/StatusBadge.jsx";
 import { Loader } from "../../components/Loader.jsx";
 import { IcTrash } from "../../assets/icons.jsx";
 import "./forms-and-modal.css";
@@ -22,7 +21,6 @@ export default function AudiencesTable({ rows, loading, onDelete }) {
     { key: "geography", label: "Geography", render: (r) => <span className="cell-muted">{r.geography || "—"}</span> },
     { key: "interests", label: "Interests", render: (r) => <span className="cell-muted">{r.interests}</span> },
     { key: "deviceType", label: "Device", render: (r) => <span className="badge badge-blue">{r.deviceType}</span> },
-    { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
     {
       key: "actions",
       label: "",

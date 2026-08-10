@@ -2,7 +2,7 @@ import React from "react";
 import DataTable from "../../components/DataTable.jsx";
 import StatusBadge from "../../components/StatusBadge.jsx";
 import { Loader } from "../../components/Loader.jsx";
-import { IcCheck, IcClose, IcSend, IcTrash } from "../../assets/icons.jsx";
+import { IcCheck, IcClose, IcSend, IcTrash, IcClock } from "../../assets/icons.jsx";
 import { formatCompact } from "../../api/utils/format.js";
 import "./forms-and-modal.css";
 
@@ -13,7 +13,7 @@ const OBJECTIVE_TONE = {
   Retention: "badge-amber",
 };
 
-export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReject, onDelete }) {
+export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReject, onActivate, onDelete, onViewHistory }) {
   const columns = [
     {
       key: "briefId",
@@ -92,10 +92,23 @@ export default function BriefsTable({ rows, loading, onSubmit, onApprove, onReje
           } else {
             statusAction = <span className="cell-muted txt-sm">Awaiting review</span>;
           }
+        } else if (r.status === "Approved") {
+          if (onActivate) {
+            statusAction = (
+              <button className="btn btn-primary btn-sm" onClick={() => onActivate(r)}>
+                <IcCheck size={14} /> Activate
+              </button>
+            );
+          } else {
+            statusAction = <span className="cell-muted txt-sm">Awaiting activation</span>;
+          }
         }
         return (
           <div className="t-actions">
             {statusAction}
+            <button className="btn btn-ghost btn-sm" onClick={() => onViewHistory?.(r)}>
+              <IcClock size={14} /> History
+            </button>
             <button className="btn btn-ghost btn-sm" onClick={() => onDelete?.(r)}>
               <IcTrash size={14} /> Delete
             </button>
