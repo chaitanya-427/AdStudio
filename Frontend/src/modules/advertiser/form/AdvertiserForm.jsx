@@ -79,7 +79,7 @@ export default function AdvertiserForm({ initial, onCancel, onSaved }) {
               required
               value={form.companyName}
               onChange={set("companyName")}
-              placeholder="Puma Corp"
+              placeholder="e.g. AdvertizeX Corp"
             />
           </div>
 
@@ -90,7 +90,7 @@ export default function AdvertiserForm({ initial, onCancel, onSaved }) {
               required
               value={form.industry}
               onChange={set("industry")}
-              placeholder="Shoes"
+              placeholder="e.g. Retail, Technology, Healthcare"
             />
           </div>
 

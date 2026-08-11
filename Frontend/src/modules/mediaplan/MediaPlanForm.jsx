@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import apiClient from "../../api/apiClient.js";
+import ENDPOINTS from "../../api/endpoints.js";
+import useApiData from "../../api/useApiData.js";
+import { MOCK_BRIEFS } from "../../data/mockData.js";
 
 /* Create/edit a media plan.
    POST /api/media-plans           (create)
@@ -14,10 +17,14 @@ export default function MediaPlanForm({ initial, onCancel, onSaved }) {
     startDate: initial?.startDate ?? "",
     endDate: initial?.endDate ?? "",
   });
-  const [saving, setSaving] = useState(false);
+   const { data: briefs } = useApiData(ENDPOINTS.campaignBriefs, MOCK_BRIEFS);
+   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const selectedBrief = briefs?.find(
+(brief) => Number(brief.briefId) === Number(form.briefId) ) || null;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -28,7 +35,7 @@ export default function MediaPlanForm({ initial, onCancel, onSaved }) {
       const payload = {
         briefId: Number(form.briefId),
         plannerId: Number(form.plannerId),
-        totalBudgetAllocated: Number(form.totalBudgetAllocated),
+        totalBudgetAllocated: Number(selectedBrief?.totalBudget ?? 0),
         channelMix: form.channelMix,
         startDate: form.startDate,
         endDate: form.endDate,
@@ -66,13 +73,20 @@ export default function MediaPlanForm({ initial, onCancel, onSaved }) {
           <div className="universal-field-row">
             <div className="universal-field">
               <label className="universal-label">Brief ID</label>
-              <input
+              <select
                 className="universal-input"
-                required
-                type="number"
+                id="briefId"
                 value={form.briefId}
                 onChange={set("briefId")}
-              />
+              >
+              <option value="">Select Brief</option>
+              {(briefs ?? []).map((brief) => (
+                <option key={brief.briefId} value={brief.briefId}>
+                  {(brief.briefId)} - {brief.campaignName}
+                </option>
+              ))}
+            </select>
+
             </div>
             <div className="universal-field">
               <label className="universal-label">Planner ID</label>
@@ -94,8 +108,8 @@ export default function MediaPlanForm({ initial, onCancel, onSaved }) {
               type="number"
               min="0.01"
               step="0.01"
-              value={form.totalBudgetAllocated}
-              onChange={set("totalBudgetAllocated")}
+              value={selectedBrief?.totalBudget ?? 0}
+             readOnly
             />
           </div>
 
