@@ -90,7 +90,7 @@ export default function BrandForm({ initial, advertisers, onCancel, onSaved }) {
               required
               value={form.brandName}
               onChange={set("brandName")}
-              placeholder="Puma Brand"
+              placeholder="e.g. Puma"
             />
           </div>
 
@@ -120,18 +120,15 @@ export default function BrandForm({ initial, advertisers, onCancel, onSaved }) {
                 onChange={set("allocatedBudget")}
               />
             </div>
+           
+           <div className="universal-field-row">
             <div className="universal-field">
-              <label className="universal-label">Spent till date (ex: $100)</label>
-              <input
-                className="universal-input"
-                type="number"
-                min="0"
-                step="0.01"
-                value={form.spentToDate}
-                onChange={set("spentToDate")}
-              />
+              <label className="universal-label">Color</label>
+              <input className="universal-input" type="color" value={form.color} onChange={set("color")} />
             </div>
           </div>
+          
+          </div> 
 
           <div className="universal-field-row">
             <div className="universal-field">
@@ -146,19 +143,14 @@ export default function BrandForm({ initial, advertisers, onCancel, onSaved }) {
               <select className="universal-select" value={form.advertiserId} onChange={set("advertiserId")}>
                 {advertisers?.map((a) => (
                   <option key={a.advertiserId} value={a.advertiserId}>
-                    {a.companyName}
+                  {a.advertiserId} - {a.companyName}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          <div className="universal-field-row">
-            <div className="universal-field">
-              <label className="universal-label">Color</label>
-              <input className="universal-input" type="color" value={form.color} onChange={set("color")} />
-            </div>
-          </div>
+          
 
           {error && <div className="universal-error-banner">{error}</div>}
 

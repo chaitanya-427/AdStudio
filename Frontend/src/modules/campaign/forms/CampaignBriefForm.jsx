@@ -102,6 +102,7 @@ export default function CampaignBriefForm({ onSubmit, onCancel, submittedById })
               id="brandId"
               value={form.brandId}
               onChange={update("brandId")}
+               className={`form-select ${errors.objective ? "has-error" : ""}`}
             >
               <option value="">Select brand…</option>
               {(brands ?? []).map((brand) => (
