@@ -78,7 +78,6 @@ export default function Navbar({ onBurger }) {
                 <div className="em">{user?.email}</div>
               </div>
               <button className="menu-item" onClick={handleProfileButton}><IcUser /> My profile</button>
-              <button className="menu-item"><IcSettings /> Settings</button>
               <button className="menu-item danger" onClick={() => { setMenuOpen(false); logout(); }}>
                 <IcLogout /> Sign out
               </button>
