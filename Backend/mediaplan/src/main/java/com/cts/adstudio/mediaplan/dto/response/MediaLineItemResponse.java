@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@Builder //instantiate objects with many fields
 public class MediaLineItemResponse {
     private Integer lineItemId;
     private Integer planId;

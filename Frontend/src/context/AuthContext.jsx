@@ -57,7 +57,6 @@ export function AuthProvider({ children }) {
   // Load eligibility once we have a session.
   useEffect(() => {
     if (isAuthenticated) loadEligibility();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   /* ---- login ---- */

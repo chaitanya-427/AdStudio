@@ -26,10 +26,10 @@ const CAT_META = {
 function timeAgo(value) {
   const d = new Date(value);
   if (isNaN(d.getTime())) return value;
-  const seconds = Math.floor((Date.now() - d.getTime()) / 1000);
+  const seconds = Math.floor((Date.now() - d.getTime()) / 1000); //now - notification time in seconds
   if (seconds < 60) return "just now";
-  if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hour${seconds < 7200 ? "" : "s"} ago`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`; //1min
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hour${seconds < 7200 ? "" : "s"} ago`;//1hr
   if (seconds < 172800) return "Yesterday";
   return `${Math.floor(seconds / 86400)} days ago`;
 }

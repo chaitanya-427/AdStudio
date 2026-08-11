@@ -60,12 +60,12 @@ export function useApiData(endpoint, mockData, deps = []) {
     return () => {
       cancelled = true;
     };
-  }, [endpoint, ...deps]);
+  }, [endpoint, ...deps]); //loads when endpoint or deps change
 
   useEffect(() => {
     const cleanup = load();
     return cleanup;
-  }, [load]);
+  }, [load]); //runs load() when comp opens & cleanup() when comp closes
 
   return { data, loading, error, isMock, reload: load };
 }

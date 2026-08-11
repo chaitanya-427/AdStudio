@@ -1,8 +1,8 @@
 /* ============================================================
    AdStudio · API client
-   A tiny fetch wrapper around the single 9090 backend.
-   - attaches the JWT from localStorage as "Authorization: Bearer <token>"
-   - unwraps the standard ApiResponse envelope { success, data, message }
+   - Provide one centralized way to call backend APIs so the rest of the 
+      React application doesn't have to deal with tokens, headers, error handling, 
+      and response parsing every time
    ============================================================ */
 
 import { API_BASE } from "./endpoints";
