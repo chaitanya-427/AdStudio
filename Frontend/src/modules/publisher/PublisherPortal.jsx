@@ -42,6 +42,7 @@ export default function PublisherPortal() {
     isMock: reportsIsMock,
     reload: reloadReports,
   } = useApiData(ENDPOINTS.deliveryRecords, MOCK_PUBLISHER_DELIVERY);
+console.log(reports);
 
   const {
     data: invoices,

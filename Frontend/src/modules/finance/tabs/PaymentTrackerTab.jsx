@@ -49,8 +49,8 @@ export default function PaymentTrackerTab({ data }) {
         </div>
         <ProgressBar value={data.collected} max={data.totalBilled} />
         <div className="flex-between mt-sm txt-sm mute">
-          <span>{formatCurrency(data.collected)} collected</span>
-          <span>{formatCurrency(data.totalBilled)} billed</span>
+          <span>{formatCompact(data.collected)} collected</span>
+          <span>{formatCompact(data.totalBilled)} billed</span>
         </div>
       </div>
     </>

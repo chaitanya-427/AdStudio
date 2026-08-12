@@ -14,11 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = IamApplication.class)
 class IamApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
-
     private static final String SECRET = "test-secret-key-test-secret-key-0123456789-abcdef";
     private static final String EMAIL = "admin@adstudio.com";
 

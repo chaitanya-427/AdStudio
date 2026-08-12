@@ -5,8 +5,8 @@ import { Loader } from "../../../components/Loader.jsx";
 import { IcSend, IcCheck, IcPlus } from "../../../assets/icons.jsx";
 import { formatCompact } from "../../../api/utils/format.js";
 import GenerateInvoiceForm from "../GenerateInvoiceForm.jsx";
-import ENDPOINTS from "../../../api/endpoints.js";
-import apiClient from "../../../api/apiClient.js";
+import ENDPOINTS, { API_BASE } from "../../../api/endpoints.js";
+import apiClient, { getToken } from "../../../api/apiClient.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 export default function ClientInvoicesTab({ data, loading, reload_doer }) {
@@ -19,8 +19,8 @@ export default function ClientInvoicesTab({ data, loading, reload_doer }) {
        
       try {
         
-        const url =  `${API_BASE}/api/publisher-invoices/${rowRecordId}/reconcile`;
-        const res = await fetch(`${API_BASE}/api/publisher-invoices/${rowRecordId}/reconcile`,
+        const url = `${API_BASE}/api/client-invoices/${rowRecordId}/status`;
+        const res = await fetch(url,
           {
             method: "PUT",
             headers: {
@@ -28,6 +28,9 @@ export default function ClientInvoicesTab({ data, loading, reload_doer }) {
               "Authorization": `Bearer ${getToken()}`,
               "X-User-Id": user.userId,
             },
+            body :JSON.stringify({
+             status: "ISSUED"
+            }),
           }
         );
     
