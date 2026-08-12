@@ -44,8 +44,6 @@ export default function DashboardOverview({ countCamp=0 , alerts}) {
   const { data: lineItems, loading: laba , reload: reloadLLineItems} =  useApiData(  "api/line-items/all",[]  );
 
     const spendByChannel = getSpendByChannelWithColor(lineItems);
-
-    
   
     const totalSpend = (delivery_records || []).reduce((s, r) => s + r.spend, 0);
    const totalImp = (delivery_records || []).reduce((s, r) => s + r.deliveredImpressions, 0);
@@ -98,7 +96,6 @@ export default function DashboardOverview({ countCamp=0 , alerts}) {
                   <div className="ll" key={m.label}>
                     <span className="sw" style={{ background: m.color }} />
                     <span className="lt">{m.label}</span>
-                    <span className="lv">{((m.value/totalSpend) *100 ).toFixed(2)}%</span>
                   </div>
                 ))}
               </div>

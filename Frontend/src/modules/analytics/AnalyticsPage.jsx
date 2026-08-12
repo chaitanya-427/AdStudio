@@ -48,12 +48,6 @@ export default function Analytics() {
     { key: "impressions", label: "Impressions", align: "right", mono: true, render: (r) => <span className="strong">{r.impressions}</span> },
     { key: "ctr", label: "Budget", align: "right", mono: true, render: (r) => `₹${r.ctr}` },
     { key: "cpm", label: "CPM", align: "right", mono: true, render: (r) => `₹${r.cpm.toFixed(2)}` },
-    { key: "deliveryRate", label: "Delivery", align: "right", render: (r) => (
-      <div className="mini-bar-wrap">
-        <div className="mini-bar"><span style={{ width: `${r.deliveryRate}%` }} /></div>
-        <span className="mb-label">{r.deliveryRate}%</span>
-      </div>
-    )},
   ];
 
   return (
