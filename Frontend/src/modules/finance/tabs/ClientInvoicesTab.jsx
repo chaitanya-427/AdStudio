@@ -62,6 +62,50 @@ export default function ClientInvoicesTab({ data, loading, reload_doer }) {
       }
     };
     
+        const handlePaidClientInvoice = async (rowRecordId) => {
+       
+      try {
+        
+        const url = `${API_BASE}/api/client-invoices/${rowRecordId}/status`;
+        const res = await fetch(url,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${getToken()}`,
+              "X-User-Id": user.userId,
+            },
+            body :JSON.stringify({
+             status: "PAID"
+            }),
+          }
+        );
+        
+    
+        if (!res.ok) {
+          let msg = `HTTP ${res.status}`;
+          try {
+            const body = await res.json();
+            msg = body.message || msg;
+          } catch (_) {
+            /* response had no JSON body */
+          }
+          throw new Error(msg);
+        }
+    
+        const text = await res.text();
+        const body = text ? JSON.parse(text) : null;
+    
+        if (body && body.success === false) {
+          throw new Error(body.message || "Reconcile failed");
+        }
+    
+        reload_doer();
+      } catch (err) {
+        console.error("Failed to reconcile invoice:", err);
+        // TODO: show a toast/error message to the user
+      }
+    };
 
   const columns = [
     {
@@ -139,7 +183,10 @@ export default function ClientInvoicesTab({ data, loading, reload_doer }) {
         if (r.status === "ISSUED" || r.status === "OVERDUE") {
           return (
             <div className="t-actions">
-              <button className="btn btn-success btn-sm">
+              <button className="btn btn-success btn-sm"
+              
+              onClick={ () => handlePaidClientInvoice(r.id) }
+              >
                 <IcCheck size={14} /> Mark paid
               </button>
             </div>
