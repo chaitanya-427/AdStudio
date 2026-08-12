@@ -33,7 +33,7 @@ public class PacingAlertService {
         var lineItem = mediaPlanClient.getLineItem(request.lineItemId().intValue()).data(); // fetch line item from media-plan service to get planned budget.
         Double pacingPercentCalc = request.spend().doubleValue() == 0
                 ? 0.0
-                : (lineItem.plannedBudget().doubleValue() / request.spend().doubleValue()) * 100;
+                : (request.spend().doubleValue() / lineItem.plannedBudget().doubleValue() ) * 100;
 
         AlertType alertTypeCalc = calculateTheAlertType(request, lineItem);
 

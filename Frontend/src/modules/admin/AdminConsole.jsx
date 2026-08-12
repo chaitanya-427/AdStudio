@@ -101,7 +101,7 @@ export default function AdminConsole() {
       {tab === "audit" && <div className="card">{ll ? <Loader /> : <DataTable columns={logColumns} rows={logs} />}</div>}
 
       {tab === "channels" && (
-        lc ? <Loader /> : (
+      
           <>
             <div className="ref-note">Channels are reference values used across media line items. This is a read-only catalog for Phase 1.</div>
             <div className="ref-grid">
@@ -119,7 +119,7 @@ export default function AdminConsole() {
               })}
             </div>
           </>
-        )
+        
       )}
     </div>
   );
